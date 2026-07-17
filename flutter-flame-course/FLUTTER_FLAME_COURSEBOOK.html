@@ -1,0 +1,3752 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A practical, notebook-style coursebook for learning 2D game development with Dart, Flutter, and Flame.">
+  <title>Flutter + Flame — Practical 2D Game Development Coursebook</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #eaf2f8;
+      --muted: #9fb1c1;
+      --faint: #738493;
+      --paper: #0b1016;
+      --paper-2: #101821;
+      --panel: #131e29;
+      --panel-2: #182633;
+      --line: #2a3a49;
+      --flame: #ffb02e;
+      --flame-2: #ff7a3d;
+      --cyan: #52d9ff;
+      --mint: #66e4b5;
+      --violet: #bca7ff;
+      --rose: #ff8baa;
+      --danger: #ff758f;
+      --shadow: 0 20px 60px rgba(0, 0, 0, .28);
+      --radius: 18px;
+      --content: 980px;
+      --mono: "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: Georgia, "Times New Roman", serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% 8%, rgba(82, 217, 255, .09), transparent 26rem),
+        radial-gradient(circle at 84% 5%, rgba(255, 176, 46, .10), transparent 24rem),
+        var(--paper);
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.72;
+    }
+
+    a { color: var(--cyan); text-underline-offset: 3px; }
+    a:hover { color: #a7edff; }
+    code, pre { font-family: var(--mono); }
+    code {
+      padding: .12rem .38rem;
+      color: #bdeeff;
+      background: rgba(82, 217, 255, .09);
+      border: 1px solid rgba(82, 217, 255, .13);
+      border-radius: 6px;
+      font-size: .91em;
+    }
+    pre {
+      overflow-x: auto;
+      margin: 0;
+      padding: 1.25rem 1.4rem;
+      color: #d9e8f1;
+      background: #090e13;
+      border: 1px solid #243340;
+      border-radius: 0 0 14px 14px;
+      font-size: .88rem;
+      line-height: 1.62;
+      tab-size: 2;
+    }
+    pre code {
+      padding: 0;
+      color: inherit;
+      background: transparent;
+      border: 0;
+      font-size: inherit;
+    }
+    kbd {
+      padding: .14rem .42rem;
+      color: var(--ink);
+      background: #263443;
+      border: 1px solid #42586b;
+      border-bottom-width: 3px;
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-size: .82em;
+    }
+    img { max-width: 100%; }
+    h1, h2, h3, h4 {
+      margin-top: 0;
+      line-height: 1.18;
+      letter-spacing: -.025em;
+    }
+    h2 { font-size: clamp(2rem, 5vw, 3.35rem); }
+    h3 {
+      margin: 2.3rem 0 .75rem;
+      color: #f3f8fb;
+      font-size: 1.42rem;
+    }
+    h4 {
+      margin: 1.5rem 0 .55rem;
+      color: var(--mint);
+      font-size: 1.06rem;
+      letter-spacing: .01em;
+      text-transform: uppercase;
+    }
+    p { margin: .75rem 0 1rem; }
+    ul, ol { padding-left: 1.35rem; }
+    li + li { margin-top: .3rem; }
+    strong { color: #fff; }
+
+    .skip-link {
+      position: fixed;
+      top: .75rem;
+      left: .75rem;
+      z-index: 10;
+      transform: translateY(-180%);
+      padding: .65rem 1rem;
+      color: #081018;
+      background: var(--cyan);
+      border-radius: 8px;
+      font-weight: 800;
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .cover {
+      min-height: 92vh;
+      display: grid;
+      place-items: center;
+      padding: 5rem 1.25rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .cover-inner {
+      width: min(1120px, 100%);
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .cover-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: .7rem;
+      margin-bottom: 1.5rem;
+      color: var(--flame);
+      font-family: var(--mono);
+      font-size: .8rem;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .cover-mark::before {
+      width: 2.8rem;
+      height: 2px;
+      content: "";
+      background: linear-gradient(90deg, var(--flame), var(--flame-2));
+    }
+    .cover h1 {
+      max-width: 840px;
+      margin-bottom: 1.3rem;
+      font-size: clamp(3.2rem, 8vw, 7.2rem);
+      line-height: .96;
+    }
+    .cover h1 span {
+      display: block;
+      color: transparent;
+      background: linear-gradient(120deg, var(--flame), #ffd26d 44%, var(--cyan));
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+    .cover .subtitle {
+      max-width: 700px;
+      color: #c2d0db;
+      font-family: var(--serif);
+      font-size: clamp(1.15rem, 2.6vw, 1.55rem);
+      line-height: 1.55;
+    }
+    .cover-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .7rem;
+      margin-top: 2rem;
+    }
+    .pill {
+      padding: .45rem .75rem;
+      color: #bed0dc;
+      background: rgba(255, 255, 255, .035);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: .78rem;
+    }
+    .cover-card {
+      position: relative;
+      padding: 2rem;
+      background:
+        linear-gradient(145deg, rgba(255, 176, 46, .08), transparent 45%),
+        var(--panel);
+      border: 1px solid #334657;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+    .cover-card::before {
+      position: absolute;
+      inset: 12px;
+      pointer-events: none;
+      content: "";
+      border: 1px dashed rgba(255, 255, 255, .08);
+      border-radius: 16px;
+    }
+    .stack {
+      position: relative;
+      display: grid;
+      gap: 1rem;
+    }
+    .stack-item {
+      display: grid;
+      grid-template-columns: 3rem 1fr;
+      gap: .9rem;
+      align-items: center;
+      padding: .85rem;
+      background: rgba(5, 10, 14, .5);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+    .stack-item b {
+      display: grid;
+      width: 3rem;
+      height: 3rem;
+      place-items: center;
+      color: #081018;
+      background: var(--cyan);
+      border-radius: 10px;
+      font-family: var(--mono);
+    }
+    .stack-item:nth-child(2) b { background: var(--mint); }
+    .stack-item:nth-child(3) b { background: var(--flame); }
+    .stack-item span { display: block; color: var(--muted); font-size: .88rem; }
+
+    .page {
+      width: min(var(--content), calc(100% - 2rem));
+      margin: 0 auto;
+    }
+    .front-matter {
+      padding: 5rem 0 2rem;
+    }
+    .front-matter > section {
+      margin-bottom: 4rem;
+      padding: clamp(1.4rem, 4vw, 2.5rem);
+      background: rgba(16, 24, 33, .72);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+    .eyebrow {
+      margin-bottom: .65rem;
+      color: var(--flame);
+      font-family: var(--mono);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .lead {
+      max-width: 820px;
+      color: #c5d4de;
+      font-family: var(--serif);
+      font-size: 1.18rem;
+      line-height: 1.65;
+    }
+    .reading-note {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .reading-note div {
+      padding: 1rem;
+      background: #0c131a;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+    .reading-note b {
+      display: block;
+      margin-bottom: .2rem;
+      color: var(--mint);
+    }
+    .reading-note span { color: var(--muted); font-size: .9rem; }
+
+    .toc {
+      padding: clamp(1.4rem, 4vw, 2.5rem);
+      background: var(--paper-2);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      columns: 2 300px;
+      column-gap: 2.5rem;
+    }
+    .toc-group {
+      break-inside: avoid;
+      margin: 0 0 1.6rem;
+    }
+    .toc h3 {
+      margin: 0 0 .65rem;
+      color: var(--flame);
+      font-size: .82rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .toc ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .toc li { margin: .36rem 0; }
+    .toc a {
+      display: grid;
+      grid-template-columns: 2.6rem 1fr;
+      gap: .35rem;
+      color: #c7d4dd;
+      text-decoration: none;
+    }
+    .toc a:hover { color: #fff; }
+    .toc code {
+      color: var(--faint);
+      background: transparent;
+      border: 0;
+    }
+
+    .block-divider {
+      width: min(1180px, calc(100% - 2rem));
+      margin: 7rem auto 3rem;
+      padding: 2rem 0;
+      border-top: 1px solid var(--line);
+    }
+    .block-divider .block-number {
+      color: var(--flame);
+      font-family: var(--mono);
+      font-size: .8rem;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .block-divider h2 {
+      margin: .35rem 0;
+      font-size: clamp(2rem, 6vw, 4rem);
+    }
+    .block-divider p {
+      max-width: 760px;
+      color: var(--muted);
+    }
+
+    .chapter {
+      width: min(var(--content), calc(100% - 2rem));
+      margin: 0 auto 5rem;
+      scroll-margin-top: 1.5rem;
+    }
+    .chapter-head {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2rem;
+      padding: clamp(1.6rem, 5vw, 3rem);
+      background:
+        linear-gradient(130deg, rgba(82, 217, 255, .08), transparent 55%),
+        var(--panel);
+      border: 1px solid #344859;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .chapter-head::after {
+      position: absolute;
+      right: -1rem;
+      bottom: -4.8rem;
+      color: rgba(255, 255, 255, .035);
+      content: attr(data-chapter);
+      font-family: var(--mono);
+      font-size: 9rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .chapter-head h2 {
+      position: relative;
+      z-index: 1;
+      max-width: 820px;
+      margin-bottom: .8rem;
+    }
+    .chapter-head .lead { position: relative; z-index: 1; margin-bottom: 0; }
+
+    .objectives,
+    .concept,
+    .example,
+    .checkpoint,
+    .exercise,
+    .pitfall,
+    .takeaways,
+    .note {
+      margin: 1.35rem 0;
+      padding: 1.2rem 1.35rem;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+    .objectives { border-left: 4px solid var(--mint); }
+    .concept { border-left: 4px solid var(--cyan); }
+    .example { border-left: 4px solid var(--violet); }
+    .checkpoint { border-left: 4px solid var(--flame); }
+    .exercise { border-left: 4px solid var(--rose); }
+    .pitfall { border-left: 4px solid var(--danger); }
+    .takeaways { border-left: 4px solid #d7e36a; }
+    .note { border-left: 4px solid var(--faint); }
+    .objectives h3,
+    .concept h3,
+    .example h3,
+    .checkpoint h3,
+    .exercise h3,
+    .pitfall h3,
+    .takeaways h3,
+    .note h3 {
+      margin: 0 0 .55rem;
+      font-size: 1.08rem;
+      letter-spacing: .01em;
+    }
+    .objectives > :last-child,
+    .concept > :last-child,
+    .example > :last-child,
+    .checkpoint > :last-child,
+    .exercise > :last-child,
+    .pitfall > :last-child,
+    .takeaways > :last-child,
+    .note > :last-child { margin-bottom: 0; }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin: 1.4rem 0;
+    }
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin: 1.4rem 0;
+    }
+    .mini-card {
+      padding: 1.1rem;
+      background: #0e161e;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+    .mini-card h4 { margin-top: 0; }
+    .mini-card p:last-child { margin-bottom: 0; }
+
+    .code-cell {
+      overflow: hidden;
+      margin: 1.35rem 0;
+      background: #090e13;
+      border: 1px solid #2c3e4d;
+      border-radius: 14px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .22);
+    }
+    .code-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: .65rem 1rem;
+      color: #9db1c1;
+      background: #131d26;
+      border-bottom: 1px solid #253542;
+      font-family: var(--mono);
+      font-size: .76rem;
+    }
+    .code-title span:last-child { color: var(--flame); }
+    .output {
+      margin: -1px 0 1.35rem;
+      padding: .9rem 1.25rem;
+      color: #b9e8cf;
+      background: #0b1714;
+      border: 1px solid #24463a;
+      border-radius: 0 0 14px 14px;
+      font-family: var(--mono);
+      font-size: .85rem;
+    }
+    .diagram {
+      overflow-x: auto;
+      margin: 1.35rem 0;
+      padding: 1.2rem 1.4rem;
+      color: #bfe9f8;
+      background: #091219;
+      border: 1px solid #244353;
+      border-radius: 14px;
+      font-family: var(--mono);
+      font-size: .84rem;
+      line-height: 1.55;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      margin: 1.35rem 0;
+      border-collapse: collapse;
+      font-size: .92rem;
+    }
+    th, td {
+      padding: .78rem .85rem;
+      text-align: left;
+      vertical-align: top;
+      border: 1px solid var(--line);
+    }
+    th { color: #fff; background: #182532; }
+    td { background: rgba(15, 23, 31, .75); }
+
+    details {
+      margin: 1rem 0;
+      background: #0d151d;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+    summary {
+      padding: .85rem 1rem;
+      color: var(--cyan);
+      cursor: pointer;
+      font-weight: 750;
+    }
+    details > div { padding: 0 1rem 1rem; color: #c3d1da; }
+
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 2.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--line);
+      font-size: .88rem;
+    }
+    .chapter-nav a { text-decoration: none; }
+
+    .appendix {
+      width: min(var(--content), calc(100% - 2rem));
+      margin: 7rem auto 4rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--line);
+    }
+    .glossary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 1.5rem;
+    }
+    .glossary div {
+      padding: .8rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .glossary dt { color: var(--mint); font-family: var(--mono); font-weight: 800; }
+    .glossary dd { margin: .2rem 0 0; color: var(--muted); }
+    .sources li { margin-bottom: .6rem; }
+
+    footer {
+      margin-top: 6rem;
+      padding: 3rem 1rem;
+      color: var(--faint);
+      background: #080c11;
+      border-top: 1px solid var(--line);
+      text-align: center;
+      font-size: .85rem;
+    }
+
+    @media (max-width: 780px) {
+      body { font-size: 16px; }
+      .cover { min-height: auto; }
+      .cover-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .cover-card { display: none; }
+      .reading-note,
+      .two-col,
+      .three-col,
+      .glossary { grid-template-columns: 1fr; }
+      .toc { columns: 1; }
+      .chapter-nav { flex-direction: column; }
+    }
+
+    @media print {
+      :root { color-scheme: light; }
+      body { color: #17212a; background: #fff; font-size: 10.5pt; }
+      a { color: #075d75; }
+      .cover { min-height: 90vh; border-bottom: 0; page-break-after: always; }
+      .cover h1 span { color: #b85a00; background: none; }
+      .cover-card, .front-matter > section, .toc, .chapter-head,
+      .objectives, .concept, .example, .checkpoint, .exercise, .pitfall,
+      .takeaways, .note, .mini-card, details {
+        color: #17212a;
+        background: #fff;
+        border-color: #b9c3ca;
+        box-shadow: none;
+      }
+      .cover .subtitle, .lead, .block-divider p, .mini-card p, details > div { color: #3e4c57; }
+      .chapter, .block-divider { width: 100%; }
+      .chapter { page-break-before: always; }
+      .chapter-head::after { display: none; }
+      .code-cell, pre { color: #15232d; background: #f5f7f8; border-color: #aebbc3; }
+      .code-title { color: #334753; background: #e8edf0; }
+      code { color: #064f68; background: #eef5f7; border-color: #cadde2; }
+      .chapter-nav, .skip-link { display: none; }
+      details { break-inside: avoid; }
+      details > div { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#contents">Skip to contents</a>
+
+  <header class="cover">
+    <div class="cover-inner">
+      <div>
+        <div class="cover-mark">Offline coursebook · 2026 edition</div>
+        <h1>Flutter + Flame <span>2D Game Development</span></h1>
+        <p class="subtitle">A practical, notebook-style path from Dart fundamentals to a polished, publishable game—built for reading, experimenting, and learning at your own pace.</p>
+        <div class="cover-meta">
+          <span class="pill">28 chapters</span>
+          <span class="pill">Dart + Flutter + Flame</span>
+          <span class="pill">Concepts + code + exercises</span>
+          <span class="pill">Single offline HTML file</span>
+        </div>
+      </div>
+      <aside class="cover-card" aria-label="Technology stack">
+        <div class="stack">
+          <div class="stack-item"><b>03</b><div><strong>Flame</strong><span>Game loop, components, sprites, collisions</span></div></div>
+          <div class="stack-item"><b>02</b><div><strong>Flutter</strong><span>Rendering, widgets, platforms, tooling</span></div></div>
+          <div class="stack-item"><b>01</b><div><strong>Dart</strong><span>Language, types, async code, architecture</span></div></div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <div class="page front-matter">
+    <section id="how-to-read">
+      <div class="eyebrow">Before you begin</div>
+      <h2>How to use this coursebook</h2>
+      <p class="lead">This document is intentionally closer to a lab notebook than a reference manual. Read one chapter, type the examples yourself, predict what will happen, and then complete the practice task without copying the solution.</p>
+      <div class="reading-note">
+        <div><b>Read actively</b><span>Pause at checkpoints and answer before opening the explanation.</span></div>
+        <div><b>Type, do not paste</b><span>Typing exposes syntax mistakes and builds useful muscle memory.</span></div>
+        <div><b>Finish small things</b><span>A tiny complete game teaches more than a huge unfinished one.</span></div>
+      </div>
+      <div class="note">
+        <h3>Version note</h3>
+        <p>The examples target modern Dart, Flutter, and the Flame 1.x API family. Flame evolves. Before using a code sample, compare it with the documentation for the exact version pinned in your project. As of 2026-07-16, pub.dev listed Flame 1.37.0.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="eyebrow">The learning loop</div>
+      <h2>One rhythm for every chapter</h2>
+      <div class="diagram" role="img" aria-label="Course learning loop">MENTAL MODEL → KEY CONCEPTS → WORKED EXAMPLE → CODE CELL
+      ↑                                              ↓
+REFLECT & ITERATE ← PRACTICE TASK ← CHECKPOINT QUESTIONS</div>
+      <p>You do not need to memorize every API. You need a reliable mental model, the ability to navigate official documentation, and enough practice to recognize the right tool for a game-design problem.</p>
+    </section>
+
+    <section id="contents">
+      <div class="eyebrow">Contents</div>
+      <h2>Course map</h2>
+      <nav class="toc" aria-label="Table of contents">
+        <div class="toc-group">
+          <h3>Block 0 · Preparation</h3>
+          <ol>
+            <li><a href="#c00"><code>C00</code><span>Environment, assessment, and workflow</span></a></li>
+            <li><a href="#c01"><code>C01</code><span>Essential Dart and Flutter foundations</span></a></li>
+          </ol>
+        </div>
+        <div class="toc-group">
+          <h3>Block 1 · Flame essentials</h3>
+          <ol>
+            <li><a href="#c02"><code>C02</code><span>GameWidget, FlameGame, and World</span></a></li>
+            <li><a href="#c03"><code>C03</code><span>Game loop, dt, and lifecycle</span></a></li>
+            <li><a href="#c04"><code>C04</code><span>Component system and structure</span></a></li>
+            <li><a href="#c05"><code>C05</code><span>2D mathematics and transformations</span></a></li>
+            <li><a href="#c06"><code>C06</code><span>Assets, sprites, and animations</span></a></li>
+          </ol>
+        </div>
+        <div class="toc-group">
+          <h3>Block 2 · Game mechanics</h3>
+          <ol>
+            <li><a href="#c07"><code>C07</code><span>Input and controls</span></a></li>
+            <li><a href="#c08"><code>C08</code><span>Movement, time, spawning, randomness</span></a></li>
+            <li><a href="#c09"><code>C09</code><span>World, camera, and parallax</span></a></li>
+            <li><a href="#c10"><code>C10</code><span>Hitboxes and collisions</span></a></li>
+            <li><a href="#c11"><code>C11</code><span>Gameplay states and architecture</span></a></li>
+            <li><a href="#c12"><code>C12</code><span>Effects, particles, and game feel</span></a></li>
+          </ol>
+        </div>
+        <div class="toc-group">
+          <h3>Block 3 · Complete game</h3>
+          <ol>
+            <li><a href="#c13"><code>C13</code><span>HUD, overlays, menus, navigation</span></a></li>
+            <li><a href="#c14"><code>C14</code><span>Audio, music, and volume</span></a></li>
+            <li><a href="#c15"><code>C15</code><span>Maps and levels with Tiled</span></a></li>
+            <li><a href="#c16"><code>C16</code><span>Enemies, AI, and difficulty</span></a></li>
+            <li><a href="#c17"><code>C17</code><span>Physics with Forge2D</span></a></li>
+            <li><a href="#c18"><code>C18</code><span>Persistence and progression</span></a></li>
+          </ol>
+        </div>
+        <div class="toc-group">
+          <h3>Block 4 · Technical quality</h3>
+          <ol>
+            <li><a href="#c19"><code>C19</code><span>Advanced rendering</span></a></li>
+            <li><a href="#c20"><code>C20</code><span>Automated testing</span></a></li>
+            <li><a href="#c21"><code>C21</code><span>Debugging and performance</span></a></li>
+            <li><a href="#c22"><code>C22</code><span>Cross-platform quality and access</span></a></li>
+          </ol>
+        </div>
+        <div class="toc-group">
+          <h3>Block 5 · Final project</h3>
+          <ol>
+            <li><a href="#c23"><code>C23</code><span>Design and pre-production</span></a></li>
+            <li><a href="#c24"><code>C24</code><span>Prototype and vertical slice</span></a></li>
+            <li><a href="#c25"><code>C25</code><span>Content, balance, polish, QA</span></a></li>
+            <li><a href="#c26"><code>C26</code><span>Building, signing, publishing</span></a></li>
+            <li><a href="#c27"><code>C27</code><span>Portfolio and retrospective</span></a></li>
+          </ol>
+        </div>
+      </nav>
+    </section>
+  </div>
+
+  <main>
+    <div class="block-divider" id="block-0">
+      <div class="block-number">Block 0</div>
+      <h2>Preparation</h2>
+      <p>Build a reliable toolchain and the Dart/Flutter mental models that Flame assumes. The goal is not to memorize syntax; it is to remove setup uncertainty before game systems become interesting.</p>
+    </div>
+
+    <section class="chapter" id="c00">
+      <header class="chapter-head" data-chapter="00">
+        <div class="eyebrow">C00 &middot; Block 0 &middot; Preparation</div>
+        <h2>Environment, assessment, and workflow</h2>
+        <p class="lead">Know which tool owns each responsibility, prove that the toolchain works, and adopt a repeatable development loop.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Explain the roles of Dart, Flutter, Flame, the editor, and a target device.</li>
+          <li>Diagnose the installed toolchain without treating every warning as a blocker.</li>
+          <li>Use a small edit-format-analyze-run-test workflow.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: a stack, not one giant program</h3>
+        <p>Dart is the language. Flutter is the SDK, rendering framework, and cross-platform toolchain. Flame is a package running inside Flutter that supplies a game loop, a component tree, input helpers, sprites, collisions, cameras, and related modules. VS Code or Android Studio edits the files; it does not replace the SDK. Finally, a browser, desktop process, emulator, or phone executes the compiled application.</p>
+      </div>
+
+      <div class="diagram" role="img" aria-label="Flutter and Flame toolchain">your Dart source
+   |
+   +-- Flutter widgets: menus, settings, overlays
+   +-- Flame: game loop, world, components, rendering
+             |
+        Flutter engine and platform toolchain
+             |
+      Windows / Android / Web / iOS / macOS / Linux</div>
+
+      <table>
+        <thead><tr><th>Command</th><th>Question it answers</th><th>Important interpretation</th></tr></thead>
+        <tbody>
+          <tr><td><code>flutter --version</code></td><td>Which Flutter channel and version are active?</td><td>The bundled Dart version should be compatible automatically.</td></tr>
+          <tr><td><code>dart --version</code></td><td>Which Dart executable is first on PATH?</td><td>It should normally agree with Flutter's bundled SDK.</td></tr>
+          <tr><td><code>flutter doctor -v</code></td><td>Which platform toolchains are ready?</td><td>A missing iOS toolchain on Windows is irrelevant; judge only the targets you need.</td></tr>
+          <tr><td><code>flutter devices</code></td><td>Where can the app run right now?</td><td>A browser and Windows desktop count as distinct targets.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-cell">
+        <div class="code-title"><span>PowerShell · environment dossier</span><span>Terminal</span></div>
+        <pre><code>flutter --version
+dart --version
+flutter doctor -v
+flutter devices
+
+# Commands used during normal development
+dart format .
+flutter analyze
+flutter test
+flutter run -d windows</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked example: deciding whether a warning matters</h3>
+        <p>Suppose <code>flutter doctor</code> reports that Chrome and Windows are ready, while Android licenses are missing. A Windows-first exercise is not blocked. Record Android as future setup work and continue. A useful diagnostic separates <em>current target blockers</em> from <em>features you are not using yet</em>.</p>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfall: fixing the entire universe first</h3>
+        <p>Beginners often spend hours making every doctor row green, install several IDEs, and update unrelated packages before running one frame. Choose one initial target. Stabilize only that path, record exact versions, and avoid upgrades in the middle of a chapter unless an error requires them.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>Can a normal Flutter application exist without Flame? Can a Flame game exist without Flutter?</li>
+          <li>Why can a doctor warning be real but irrelevant?</li>
+          <li>What is the difference between static analysis and running the application?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div>
+            <p>Flutter does not require Flame; Flame is built on Flutter and therefore does require it. A warning matters only if it affects a platform or tool you currently intend to use. Static analysis inspects source code for type, lint, and API problems without executing the game, while running exercises the actual build and runtime path.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: create an environment dossier</h3>
+        <p>Run the four diagnostic commands. Record the Flutter and Dart versions, chosen first target, visible devices, blockers, and deferred warnings. Then write a five-step workflow you will follow after each meaningful change. Do not create the game project until you can explain the stack above.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li>Toolchain layers have separate responsibilities.</li>
+          <li>One working target is enough to begin.</li>
+          <li>Versions and diagnostic decisions belong in the project log.</li>
+        </ul>
+      </div>
+
+      <div class="note">
+        <h3>Official reference</h3>
+        <p>Use Flutter's <a href="https://docs.flutter.dev/install" target="_blank" rel="noreferrer">installation guide</a> and <a href="https://docs.flutter.dev/reference/flutter-cli" target="_blank" rel="noreferrer">CLI reference</a> for platform-specific setup.</p>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#contents">&larr; Course contents</a>
+        <a href="#c01">C01 Dart and Flutter foundations &rarr;</a>
+      </nav>
+    </section>
+
+    <section class="chapter" id="c01">
+      <header class="chapter-head" data-chapter="01">
+        <div class="eyebrow">C01 &middot; Block 0 &middot; Preparation</div>
+        <h2>Essential Dart and Flutter foundations</h2>
+        <p class="lead">Use types to protect game rules, objects to name responsibilities, async code for loading, and widgets as projections of state.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Read null-safe Dart classes, enums, collections, functions, and mixins.</li>
+          <li>Understand why asset loading returns a <code>Future</code>.</li>
+          <li>Distinguish persistent state from the widget tree that displays it.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: state, behavior, projection</h3>
+        <p>A game stores state—health, score, position, phase—and exposes behavior that changes that state legally. Flutter widgets project some of that state onto a screen. Rebuilding a widget is normal; destroying the only copy of the game session during a rebuild is not. Keep rules in plain Dart when possible, then let Flutter or Flame present them.</p>
+      </div>
+
+      <div class="three-col">
+        <div class="mini-card"><h4>Types</h4><p>Make impossible values harder to represent. An enum is clearer than strings such as <code>"ded"</code> and <code>"dead"</code>.</p></div>
+        <div class="mini-card"><h4>Objects</h4><p>Bundle related state and behavior. Prefer meaningful methods over unrestricted public mutation.</p></div>
+        <div class="mini-card"><h4>Async</h4><p>A <code>Future</code> represents a value that will arrive later, such as a decoded image or save file.</p></div>
+      </div>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/domain/player_stats.dart</span><span>Dart</span></div>
+        <pre><code>enum PlayerCondition { ready, hurt, defeated }
+
+class PlayerStats {
+  PlayerStats({this.maxHealth = 3}) : health = maxHealth;
+
+  final int maxHealth;
+  int health;
+  int score = 0;
+
+  PlayerCondition get condition {
+    if (health == 0) return PlayerCondition.defeated;
+    if (health &lt; maxHealth) return PlayerCondition.hurt;
+    return PlayerCondition.ready;
+  }
+
+  void collect({int points = 10}) {
+    if (condition == PlayerCondition.defeated) return;
+    score += points;
+  }
+
+  void takeDamage(int amount) {
+    health = (health - amount).clamp(0, maxHealth).toInt();
+  }
+}
+
+Future&lt;PlayerStats&gt; loadPlayer() async {
+  await Future&lt;void&gt;.delayed(const Duration(milliseconds: 100));
+  return PlayerStats();
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked example: why a method beats a public assignment</h3>
+        <p>If any component can run <code>health = -900</code>, every reader must defend against nonsense. <code>takeDamage()</code> centralizes clamping and later becomes the natural place for invulnerability, sound, or events. Encapsulation is not ceremony; it keeps rules consistent.</p>
+      </div>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/main.dart · a tiny Flutter projection</span><span>Dart</span></div>
+        <pre><code>import 'package:flutter/material.dart';
+
+void main() =&gt; runApp(const CourseApp());
+
+class CourseApp extends StatelessWidget {
+  const CourseApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Text('The game world will appear here.'),
+        ),
+      ),
+    );
+  }
+}</code></pre>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfall: silencing null safety</h3>
+        <p>The postfix <code>!</code> means “I promise this is not null.” It does not make a value safe; it moves failure to runtime. Prefer required constructor parameters, early returns, nullable access, or initialization in a lifecycle method that guarantees the value exists.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>Why is <code>PlayerCondition</code> safer than a free-form string?</li>
+          <li>What does <code>await</code> do to the current async function?</li>
+          <li>Why should game rules not depend directly on a particular text widget?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div>
+            <p>An enum restricts values and enables exhaustive tooling. <code>await</code> suspends that async function until the future completes without blocking the entire application thread. Rules outlive individual widgets and should be testable without rendering a screen.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: model a collectible session</h3>
+        <p>Create a pure Dart <code>GameSession</code> with score, remaining time, and a phase enum. Add methods for collecting an item, ticking time, winning, losing, and resetting. Write five assertions covering boundaries. Bonus: expose read-only getters while keeping mutation private.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li>Types and enums communicate rules before the game runs.</li>
+          <li>Async loading belongs in explicit lifecycle boundaries.</li>
+          <li>Flutter widgets display state; they do not need to own all of it.</li>
+        </ul>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#c00">&larr; C00 Environment and workflow</a>
+        <a href="#c02">C02 First Flame project &rarr;</a>
+      </nav>
+    </section>
+
+    <div class="block-divider" id="block-1">
+      <div class="block-number">Block 1</div>
+      <h2>Flame essentials</h2>
+      <p>Move from a Flutter shell into a real-time world. Learn the loop, component tree, coordinate spaces, and asset pipeline before building complicated mechanics.</p>
+    </div>
+
+    <section class="chapter" id="c02">
+      <header class="chapter-head" data-chapter="02">
+        <div class="eyebrow">C02 &middot; Block 1 &middot; Flame essentials</div>
+        <h2>GameWidget, FlameGame, and World</h2>
+        <p class="lead">Create the bridge between Flutter's widget tree and Flame's continuously updated component world.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Create a Flutter project and add a pinned Flame dependency.</li>
+          <li>Explain the responsibilities of <code>GameWidget</code>, <code>FlameGame</code>, and <code>World</code>.</li>
+          <li>Render a simple component without loading external art.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: bridge, director, stage</h3>
+        <p><code>GameWidget</code> is the Flutter bridge: it gives Flame screen space, focus, overlays, and lifecycle integration. <code>FlameGame</code> owns the loop and root component tree. <code>World</code> contains objects that exist in game coordinates. A camera observes that world. Keeping these roles distinct makes menus and game objects easier to reason about.</p>
+      </div>
+
+      <div class="diagram" role="img" aria-label="GameWidget FlameGame World relationship">Flutter widget tree
+  MaterialApp
+    Scaffold
+      GameWidget
+        FlameGame  ← update/render loop
+          +-- World  ← player, enemies, level
+          +-- Camera ← viewport, viewfinder, HUD</div>
+
+      <div class="code-cell">
+        <div class="code-title"><span>PowerShell · project creation</span><span>Terminal</span></div>
+        <pre><code>flutter create --project-name flame_course_game .
+flutter pub add flame
+dart format .
+flutter analyze
+flutter run -d windows</code></pre>
+      </div>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/main.dart · first Flame frame</span><span>Dart</span></div>
+        <pre><code>import 'dart:ui';
+
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flutter/widgets.dart';
+
+void main() {
+  final game = CourseGame();
+  runApp(GameWidget(game: game));
+}
+
+class CourseGame extends FlameGame&lt;CourseWorld&gt; {
+  CourseGame()
+      : super(
+          world: CourseWorld(),
+          camera: CameraComponent.withFixedResolution(
+            width: 800,
+            height: 450,
+          ),
+        );
+}
+
+class CourseWorld extends World {
+  @override
+  Future&lt;void&gt; onLoad() async {
+    await super.onLoad();
+    await add(
+      RectangleComponent(
+        position: Vector2.zero(),
+        size: Vector2(80, 80),
+        anchor: Anchor.center,
+        paint: Paint()..color = const Color(0xff52d9ff),
+      ),
+    );
+  }
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked example: where should a pause menu live?</h3>
+        <p>The moving player belongs in <code>World</code>. A pause menu made from normal Flutter controls belongs above <code>GameWidget</code> as an overlay. The score could be a Flame HUD component or a Flutter widget depending on the desired layout and accessibility. Ownership follows coordinate space and responsibility.</p>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfall: constructing the game inside every build</h3>
+        <p>A Flutter <code>build()</code> method may run many times. Creating <code>CourseGame()</code> there without preserving the instance can reset the world unexpectedly. Create the instance once in state, provide it from outside the frequently rebuilt subtree, or use <code>GameWidget.controlled</code> deliberately.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>Which object owns the game loop?</li>
+          <li>Where do enemies normally live?</li>
+          <li>Why is <code>GameWidget</code> valuable even when the game fills the screen?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div><p><code>FlameGame</code> owns the loop. Enemies normally live under <code>World</code>. <code>GameWidget</code> integrates the game with Flutter, making overlays, navigation, lifecycle, layout, and focus available even for a full-screen game.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: shape playground</h3>
+        <p>Create a project, pin the resolved versions, and show three primitive components with different positions, colors, sizes, and anchors. Resize the window. Record what remains stable and what changes. Keep the game instance alive across a parent widget rebuild.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li><code>GameWidget</code> embeds; <code>FlameGame</code> coordinates; <code>World</code> contains.</li>
+          <li>A camera renders a world rather than the world painting itself directly.</li>
+          <li>Start with shapes so asset problems cannot hide structural problems.</li>
+        </ul>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#c01">&larr; C01 Dart and Flutter foundations</a>
+        <a href="#c03">C03 Game loop and lifecycle &rarr;</a>
+      </nav>
+    </section>
+
+    <section class="chapter" id="c03">
+      <header class="chapter-head" data-chapter="03">
+        <div class="eyebrow">C03 &middot; Block 1 &middot; Flame essentials</div>
+        <h2>Game loop, dt, and lifecycle</h2>
+        <p class="lead">Advance the simulation by elapsed time, load once at the right boundary, and clean up what a component owns.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Explain the update-render cycle and delta time in seconds.</li>
+          <li>Choose appropriate lifecycle callbacks for loading, mounting, resizing, and removal.</li>
+          <li>Implement frame-rate-independent movement.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: simulate, then present</h3>
+        <p>During an update, the game advances state by the elapsed time <code>dt</code>. During render, it draws the current state. At 60 updates per second, <code>dt</code> is roughly 0.0167; after a brief stall it may be larger. Movement must therefore be <em>speed per second multiplied by elapsed seconds</em>, not “pixels per frame.”</p>
+      </div>
+
+      <div class="diagram" role="img" aria-label="Game loop">input arrives
+     ↓
+update(dt): state changes → positions, timers, AI, collisions
+     ↓
+render(canvas): current state becomes pixels
+     ↓
+display frame → repeat</div>
+
+      <table>
+        <thead><tr><th>Callback</th><th>Use it for</th><th>Avoid</th></tr></thead>
+        <tbody>
+          <tr><td><code>onLoad</code></td><td>One-time async setup, assets, initial children.</td><td>Per-frame calculations.</td></tr>
+          <tr><td><code>onMount</code></td><td>Work requiring a mounted parent/tree.</td><td>Assuming it runs only once forever.</td></tr>
+          <tr><td><code>update(dt)</code></td><td>Movement, timers, rules that advance.</td><td>I/O, decoding images, allocating constantly.</td></tr>
+          <tr><td><code>onGameResize</code></td><td>Reacting to canvas-size changes.</td><td>Resetting the whole session.</td></tr>
+          <tr><td><code>onRemove</code></td><td>Unsubscribing and releasing owned resources.</td><td>Leaving external listeners active.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/game/moving_block.dart</span><span>Dart</span></div>
+        <pre><code>import 'package:flame/components.dart';
+
+class MovingBlock extends RectangleComponent {
+  MovingBlock({
+    required super.position,
+    required this.velocity,
+  }) : super(size: Vector2.all(36));
+
+  final Vector2 velocity; // world units per second
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    position += velocity * dt;
+  }
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked calculation</h3>
+        <p>A ship moving at 120 units per second receives <code>dt = 0.016</code>. It advances <code>120 × 0.016 = 1.92</code> units. If the next frame takes twice as long, it advances about twice as far. Over real time, speed remains stable.</p>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfall: hiding expensive work in update</h3>
+        <p>Loading an image, parsing JSON, or creating large lists inside <code>update()</code> repeats that cost every frame. Load at a lifecycle boundary, cache what is reusable, and let update mutate small existing values. Also guard extreme <code>dt</code> where your rules require it; returning from the background can produce a large gap.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>Why is <code>position.x += 2</code> frame-rate dependent?</li>
+          <li>Can <code>onMount</code> run again after removal and re-addition?</li>
+          <li>Should render decide whether the player has won?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div><p>Two units per frame becomes faster as frame count increases. A component may mount again, so mounting is not synonymous with one-time construction. Winning is a state update; render should display the result rather than create it.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: compare two movers</h3>
+        <p>Create one component that moves by a constant amount per frame and another that uses velocity multiplied by <code>dt</code>. Temporarily simulate different timing or resize/stress the app. Explain the observed difference, then remove the incorrect mover. Add pause/resume controls and verify no giant jump occurs.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li><code>dt</code> is elapsed seconds, not a target frame count.</li>
+          <li>Lifecycle methods establish safe ownership boundaries.</li>
+          <li>Update changes state; render shows state.</li>
+        </ul>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#c02">&larr; C02 First Flame project</a>
+        <a href="#c04">C04 Component system &rarr;</a>
+      </nav>
+    </section>
+
+    <section class="chapter" id="c04">
+      <header class="chapter-head" data-chapter="04">
+        <div class="eyebrow">C04 &middot; Block 1 &middot; Flame essentials</div>
+        <h2>Flame Component System and structure</h2>
+        <p class="lead">Compose behavior into a tree, assign one clear owner to each object, and communicate through small meaningful interfaces.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Read the Flame component tree and lifecycle propagation.</li>
+          <li>Choose parent-child relationships based on ownership and transforms.</li>
+          <li>Avoid global lookups and circular dependencies.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: a scene tree is an ownership tree</h3>
+        <p>A component can own children. Children inherit the parent's transform and lifecycle context. A health bar attached to an enemy can be its child because it moves and disappears with that enemy. A global score HUD should not be a child of the player because a player respawn must not destroy the session UI.</p>
+      </div>
+
+      <div class="diagram" role="img" aria-label="Example component tree">FlameGame
+├── World
+│   ├── Player
+│   │   ├── Sprite
+│   │   └── Weapon
+│   ├── EnemySpawner
+│   └── Level
+└── Camera
+    └── Viewport
+        ├── ScoreText
+        └── PauseButton</div>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/game/player.dart</span><span>Dart</span></div>
+        <pre><code>import 'dart:ui';
+
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+
+class CourseGame extends FlameGame {
+  int score = 0;
+
+  void collectCoin() {
+    score += 10;
+  }
+}
+
+class Player extends PositionComponent
+    with HasGameReference&lt;CourseGame&gt; {
+  Player({required super.position})
+      : super(size: Vector2.all(40), anchor: Anchor.center);
+
+  @override
+  Future&lt;void&gt; onLoad() async {
+    await super.onLoad();
+    await add(
+      CircleComponent(
+        radius: 6,
+        position: size / 2,
+        anchor: Anchor.center,
+        paint: Paint()..color = const Color(0xffffb02e),
+      ),
+    );
+  }
+
+  void collect() {
+    game.collectCoin();
+  }
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked decision: child or sibling?</h3>
+        <p>A sword that rotates with the player is naturally a child. A projectile that continues after the player is removed should be added to the world as a sibling. Ask two questions: “Should it inherit this transform?” and “Should it share this lifetime?” If either answer is no, reconsider the parent.</p>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfall: a god component</h3>
+        <p>A single game class that moves every enemy, draws every object, plays every sound, and saves every setting becomes difficult to test or change. Split by responsibility, but do not create empty abstractions for their own sake. A good component owns a coherent piece of state and behavior.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>Why might a weapon be a child of a player?</li>
+          <li>What does <code>priority</code> affect?</li>
+          <li>Why are meaningful game methods preferable to editing unrelated fields?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div><p>A child can inherit position and rotation and share removal. Priority controls ordering among siblings, including update/render order where relevant; it is not a substitute for a sensible tree. Methods such as <code>collectCoin()</code> protect rules and reduce coupling.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: refactor a small scene</h3>
+        <p>Build a player with a child marker, three independent collectibles, and a HUD attached to the camera viewport. Remove and re-add the player. Confirm which objects disappear, which remain, and why. Draw the final component tree before writing a second version.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li>Parenthood expresses transform and lifetime ownership.</li>
+          <li>Small components are useful when they own real responsibility.</li>
+          <li>Communicate through game concepts, not arbitrary shared mutation.</li>
+        </ul>
+      </div>
+
+      <div class="note">
+        <h3>Official reference</h3>
+        <p>Flame's <a href="https://docs.flame-engine.org/latest/flame/components/components.html" target="_blank" rel="noreferrer">component documentation</a> details lifecycle, queries, priorities, and mixins.</p>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#c03">&larr; C03 Game loop and lifecycle</a>
+        <a href="#c05">C05 2D mathematics &rarr;</a>
+      </nav>
+    </section>
+
+    <section class="chapter" id="c05">
+      <header class="chapter-head" data-chapter="05">
+        <div class="eyebrow">C05 &middot; Block 1 &middot; Flame essentials</div>
+        <h2>2D mathematics, coordinates, and transformations</h2>
+        <p class="lead">Turn positions into directions, directions into motion, and local shapes into a coherent world.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Use <code>Vector2</code> for positions, offsets, directions, and velocities.</li>
+          <li>Distinguish local, parent, world, camera, and screen coordinates.</li>
+          <li>Predict how anchor, scale, and angle affect a component.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: a vector has context</h3>
+        <p><code>Vector2(3, 4)</code> may be a position, an offset, a velocity, or a size. The numbers alone do not say which. Names and coordinate space give the vector meaning. Subtracting two positions produces an offset. Normalizing that offset produces a unit direction. Multiplying by speed produces velocity; multiplying velocity by <code>dt</code> produces this frame's displacement.</p>
+      </div>
+
+      <div class="diagram" role="img" aria-label="Vector movement pipeline">target position - current position = offset
+offset / offset length            = unit direction
+unit direction × units per second = velocity
+velocity × delta seconds           = frame displacement</div>
+
+      <table>
+        <thead><tr><th>Property</th><th>Meaning</th><th>Frequent surprise</th></tr></thead>
+        <tbody>
+          <tr><td><code>position</code></td><td>Anchor location in the parent's coordinates.</td><td>It is not always the top-left corner.</td></tr>
+          <tr><td><code>anchor</code></td><td>Reference point inside the component.</td><td>Changing it appears to move an unchanged position.</td></tr>
+          <tr><td><code>angle</code></td><td>Rotation in radians around the anchor.</td><td>Positive rotation follows the canvas coordinate convention.</td></tr>
+          <tr><td><code>scale</code></td><td>Multiplier applied around the anchor.</td><td>Children inherit parent transforms.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/game/seeker.dart</span><span>Dart</span></div>
+        <pre><code>import 'dart:math' as math;
+
+import 'package:flame/components.dart';
+
+class Seeker extends PositionComponent {
+  Seeker({
+    required super.position,
+    required this.target,
+    this.speed = 140,
+  }) : super(size: Vector2.all(24), anchor: Anchor.center);
+
+  Vector2 target;
+  final double speed;
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+
+    final offset = target - position;
+    final distance = offset.length;
+    if (distance &lt; 0.001) return;
+
+    final direction = offset / distance;
+    final step = math.min(speed * dt, distance);
+    position += direction * step;
+    angle = math.atan2(direction.y, direction.x);
+  }
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked example: anchor changes interpretation</h3>
+        <p>A 40×20 component at <code>(100, 100)</code> with <code>Anchor.topLeft</code> occupies roughly x=100…140 and y=100…120 before rotation. With <code>Anchor.center</code>, the same position describes its center, so it occupies roughly x=80…120 and y=90…110. Center anchors usually simplify characters, projectiles, and rotations.</p>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfall: mixing spaces</h3>
+        <p>A pointer event may provide screen or local coordinates while an enemy lives in world coordinates viewed through a moving camera. Comparing them directly produces an offset that changes as the camera moves. Convert deliberately, or handle input on a component where Flame already supplies an appropriate local position.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>What does subtracting one position from another produce?</li>
+          <li>Why normalize before applying a constant speed?</li>
+          <li>What happens to a child when its parent rotates?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div><p>Subtraction produces the offset from one point to the other. Normalization removes distance from the vector so all directions receive the same speed. A child inherits the parent transform, so its position and orientation are transformed with the parent.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: transformation laboratory</h3>
+        <p>Draw three rectangles with top-left, center, and bottom-right anchors. Place them at the same position, then rotate and scale them. Add a seeker that stops exactly at a clicked target without overshooting. Label world and local coordinates on screen.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li>Vector meaning comes from names and coordinate space.</li>
+          <li>Normalize direction, then apply speed and time.</li>
+          <li>Anchor is the reference for position, rotation, and scale.</li>
+        </ul>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#c04">&larr; C04 Component system</a>
+        <a href="#c06">C06 Assets and animation &rarr;</a>
+      </nav>
+    </section>
+
+    <section class="chapter" id="c06">
+      <header class="chapter-head" data-chapter="06">
+        <div class="eyebrow">C06 &middot; Block 1 &middot; Flame essentials</div>
+        <h2>Assets, sprites, and animations</h2>
+        <p class="lead">Declare resources explicitly, load them before they are needed, and turn image regions into time-based animation.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Organize and declare image assets correctly.</li>
+          <li>Explain the relationship between image, sprite, sprite sheet, and animation.</li>
+          <li>Preload reusable graphics and avoid first-use stutter.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: bytes → image → region → frames</h3>
+        <p>An asset file becomes a decoded image in memory. A sprite describes a region of that image and how to draw it. A sprite sheet packs many regions into one image. A sprite animation selects frames over time. Loading and decoding are lifecycle work; choosing the next already-loaded frame is update work.</p>
+      </div>
+
+      <div class="two-col">
+        <div class="mini-card"><h4>Preload</h4><p>Load assets for the next scene before gameplay begins. A short intentional loading state is better than a random hitch during the first attack.</p></div>
+        <div class="mini-card"><h4>Reuse</h4><p>Many components can share one decoded image or animation data. Do not decode the same file for every enemy.</p></div>
+      </div>
+
+      <div class="code-cell">
+        <div class="code-title"><span>pubspec.yaml · asset declaration</span><span>YAML</span></div>
+        <pre><code>flutter:
+  assets:
+    - assets/images/
+    - assets/audio/</code></pre>
+      </div>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/game/animated_player.dart</span><span>Dart</span></div>
+        <pre><code>import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
+
+class AnimatedPlayer extends SpriteAnimationComponent {
+  AnimatedPlayer({required super.position})
+      : super(
+          size: Vector2.all(64),
+          anchor: Anchor.center,
+        );
+
+  @override
+  Future&lt;void&gt; onLoad() async {
+    await super.onLoad();
+
+    final image = await Flame.images.load('player_walk.png');
+    animation = SpriteAnimation.fromFrameData(
+      image,
+      SpriteAnimationData.sequenced(
+        amount: 6,
+        stepTime: 0.10,
+        textureSize: Vector2(32, 32),
+      ),
+    );
+  }
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked example: six-frame walk cycle</h3>
+        <p>At <code>stepTime: 0.10</code>, each frame lasts one tenth of a second, so six frames complete in 0.6 seconds. The component may render at 64×64 while each source frame is 32×32; source texture size and world size are separate decisions.</p>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfall: path and frame assumptions</h3>
+        <p>Flame's image cache commonly resolves names under <code>assets/images</code>, while Flutter still requires the asset directory in <code>pubspec.yaml</code>. A single wrong filename, case difference, padding pixel, or frame count can make correct animation code look broken. Inspect the sheet dimensions and calculate the frame grid.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>What is the difference between a decoded image and a sprite?</li>
+          <li>Why preload an attack sound or animation?</li>
+          <li>Does changing a component's world size change the source frame dimensions?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div><p>An image is pixel data; a sprite describes how to draw all or part of it. Preloading moves I/O and decoding away from the moment of first use. World size scales rendering but does not redefine the texture region.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: two-state character</h3>
+        <p>Add idle and walk sheets, preload both, and switch animation according to velocity. Confirm that stopping returns to idle without recreating the component. Document the asset license and record the memory dimensions of each source image.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li>Declare, preload, cache, and reuse.</li>
+          <li>Texture coordinates and world dimensions solve different problems.</li>
+          <li>Animation state should follow gameplay state rather than own it.</li>
+        </ul>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#c05">&larr; C05 2D mathematics</a>
+        <a href="#c07">C07 Input and controls &rarr;</a>
+      </nav>
+    </section>
+
+    <div class="block-divider" id="block-2">
+      <div class="block-number">Block 2</div>
+      <h2>Game mechanics</h2>
+      <p>Translate player intent into time-based motion, frame a larger world through a camera, detect meaningful contact, and assemble a complete playable loop.</p>
+    </div>
+
+    <section class="chapter" id="c07">
+      <header class="chapter-head" data-chapter="07">
+        <div class="eyebrow">C07 &middot; Block 2 &middot; Game mechanics</div>
+        <h2>Touch, mouse, keyboard, and controls</h2>
+        <p class="lead">Translate device events into gameplay intentions so one rule set can serve several control schemes.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Handle keyboard and pointer input with current Flame event APIs.</li>
+          <li>Separate physical buttons from actions such as move, fire, and pause.</li>
+          <li>Support simultaneous directions and predictable focus behavior.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: device event → intent → action</h3>
+        <p>The Space key, a touch button, and a gamepad trigger can all mean <em>fire</em>. Components should consume that intent rather than know every physical device. This makes remapping, accessibility options, replay, and automated tests substantially easier.</p>
+      </div>
+
+      <table>
+        <thead><tr><th>Layer</th><th>Examples</th><th>Responsibility</th></tr></thead>
+        <tbody>
+          <tr><td>Physical input</td><td>WASD, pointer down, joystick axis</td><td>Read platform events.</td></tr>
+          <tr><td>Intent</td><td>Move vector, fire pressed, pause requested</td><td>Normalize and combine controls.</td></tr>
+          <tr><td>Gameplay</td><td>Accelerate player, spawn projectile</td><td>Apply rules only when the game phase allows it.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/game/input_game.dart</span><span>Dart</span></div>
+        <pre><code>import 'package:flame/events.dart';
+import 'package:flame/game.dart';
+import 'package:flutter/services.dart';
+
+class InputGame extends FlameGame with KeyboardEvents {
+  final moveIntent = Vector2.zero();
+
+  @override
+  KeyEventResult onKeyEvent(
+    KeyEvent event,
+    Set&lt;LogicalKeyboardKey&gt; keysPressed,
+  ) {
+    moveIntent
+      ..setZero()
+      ..x = (keysPressed.contains(LogicalKeyboardKey.keyD) ? 1 : 0) -
+          (keysPressed.contains(LogicalKeyboardKey.keyA) ? 1 : 0)
+      ..y = (keysPressed.contains(LogicalKeyboardKey.keyS) ? 1 : 0) -
+          (keysPressed.contains(LogicalKeyboardKey.keyW) ? 1 : 0);
+
+    if (moveIntent.length2 &gt; 0) {
+      moveIntent.normalize();
+    }
+    return KeyEventResult.handled;
+  }
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked example: diagonal speed</h3>
+        <p>Pressing D produces <code>(1, 0)</code>, whose length is 1. Pressing D+S produces <code>(1, 1)</code>, whose length is about 1.414. Normalizing prevents diagonal movement from being 41% faster. The player later multiplies the normalized intent by speed and <code>dt</code>.</p>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfall: acting only on key-down</h3>
+        <p>A key-down event is good for a one-shot action, but continuous movement should reflect the current pressed-key set. Otherwise release events, simultaneous keys, and lost focus can leave movement stuck. Also decide whether an input event should propagate to components underneath an overlay.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>Why should the player not directly check whether Space is held?</li>
+          <li>Why normalize a combined movement vector?</li>
+          <li>Which actions are continuous and which are edge-triggered?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div><p>Consuming a fire intent decouples the player from hardware and enables remapping. Normalization preserves equal speed in all directions. Movement is commonly continuous; jump, confirm, pause, and a single shot are usually triggered on a press edge, though design can vary.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: two control schemes</h3>
+        <p>Create one movement-intent object. Feed it from WASD/arrow keys and from an on-screen joystick or drag gesture. The player must contain only one movement implementation. Add a pause overlay that captures input so gameplay does not continue receiving taps.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li>Map physical input to semantic intent.</li>
+          <li>Use current key state for continuous actions.</li>
+          <li>Normalize combined direction and manage focus explicitly.</li>
+        </ul>
+      </div>
+
+      <div class="note">
+        <h3>Official reference</h3>
+        <p>Flame documents tap, drag, keyboard, pointer, and gesture APIs in its <a href="https://docs.flame-engine.org/latest/flame/inputs/inputs.html" target="_blank" rel="noreferrer">input section</a>.</p>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#c06">&larr; C06 Assets and animation</a>
+        <a href="#c08">C08 Movement and time &rarr;</a>
+      </nav>
+    </section>
+
+    <section class="chapter" id="c08">
+      <header class="chapter-head" data-chapter="08">
+        <div class="eyebrow">C08 &middot; Block 2 &middot; Game mechanics</div>
+        <h2>Movement, time, spawning, and randomness</h2>
+        <p class="lead">Treat time as data, centralize cooldowns, and make random behavior reproducible when debugging.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Build movement, cooldowns, and durations from seconds.</li>
+          <li>Spawn and remove entities without leaking component state.</li>
+          <li>Use a seeded random generator to reproduce a run.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: clocks create opportunities</h3>
+        <p>A timer should signal that an action may occur; the game still checks whether the action is legal. A spawn timer may tick while a round is paused or already won unless it is owned by the appropriate world or phase. Put temporal behavior close to the system that owns its meaning.</p>
+      </div>
+
+      <div class="diagram" role="img" aria-label="Spawn timing">elapsed dt accumulates
+        ↓
+timer reaches interval
+        ↓
+phase allows spawn? ── no → discard tick
+        │
+       yes
+        ↓
+seeded RNG chooses legal position → world.add(enemy)</div>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/game/spawn_controller.dart</span><span>Dart</span></div>
+        <pre><code>import 'dart:math';
+
+import 'package:flame/components.dart';
+import 'package:flame/timer.dart';
+
+class SpawnController extends Component {
+  SpawnController({required this.spawn});
+
+  final void Function(Vector2 position) spawn;
+  final Random _random = Random(42);
+  late final Timer _timer;
+
+  @override
+  Future&lt;void&gt; onLoad() async {
+    await super.onLoad();
+    _timer = Timer(
+      1.2,
+      repeat: true,
+      onTick: () {
+        final position = Vector2(
+          100 + _random.nextDouble() * 600,
+          -20,
+        );
+        spawn(position);
+      },
+    )..start();
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    _timer.update(dt);
+  }
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked example: reproducible bug</h3>
+        <p>A random enemy occasionally appears inside a wall. With an unseeded generator the next run may hide the problem. With seed 42, the same sequence returns, so you can inspect the exact spawn, fix the legal-position algorithm, and keep the seed in a regression test.</p>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfall: one timer per trivial object</h3>
+        <p>Timers are useful, but thousands of tiny independent schedules can make behavior hard to inspect. Group wave scheduling when events share one clock, and remove components that have completed their role. Do not use wall-clock time for simulation rules that must pause with the game.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>Why is a cooldown normally measured in seconds rather than frames?</li>
+          <li>What advantage does a seed provide?</li>
+          <li>Should a spawn timer alone decide that spawning is legal?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div><p>Seconds remain meaningful across frame rates. A seed reproduces the same pseudo-random sequence. A timer only reports elapsed time; game phase, capacity, and level rules should still authorize the spawn.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: deterministic wave</h3>
+        <p>Create a 20-second wave with a seeded spawn sequence, a maximum active-enemy count, and a fire cooldown. Log spawn times and positions. Restart with the same seed and confirm the log matches; change only the seed and confirm the structure remains valid.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li>Simulation time should pause and resume with the simulation.</li>
+          <li>Timers schedule; rules authorize.</li>
+          <li>Seeds turn random failures into reproducible cases.</li>
+        </ul>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#c07">&larr; C07 Input and controls</a>
+        <a href="#c09">C09 World and camera &rarr;</a>
+      </nav>
+    </section>
+
+    <section class="chapter" id="c09">
+      <header class="chapter-head" data-chapter="09">
+        <div class="eyebrow">C09 &middot; Block 2 &middot; Game mechanics</div>
+        <h2>World, camera, resolution, and parallax</h2>
+        <p class="lead">Keep the world independent from the window through which the player observes it.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Distinguish world, viewport, viewfinder, backdrop, and HUD.</li>
+          <li>Choose between fixed resolution and adaptive visible area.</li>
+          <li>Follow a target while preserving readable composition and bounds.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: the world exists; the camera looks</h3>
+        <p>A world is not the screen. It may be much larger, and several cameras could observe it. The viewport defines the on-screen window. The viewfinder controls the observed location, zoom, angle, and anchor. Children of the viewport make convenient static HUD elements; world children move beneath the camera.</p>
+      </div>
+
+      <div class="diagram" role="img" aria-label="Camera structure">FlameGame
+├── World: player, enemies, map
+└── CameraComponent
+    ├── Backdrop: static content behind world
+    ├── Viewfinder: position, zoom, angle, follow
+    └── Viewport: screen window + static HUD children</div>
+
+      <table>
+        <thead><tr><th>Strategy</th><th>Strength</th><th>Trade-off</th></tr></thead>
+        <tbody>
+          <tr><td>Fixed resolution</td><td>Predictable composition and coordinates.</td><td>May show bars or underuse unusual screens.</td></tr>
+          <tr><td>Maximum viewport</td><td>Uses all available screen space.</td><td>Visible world area changes by device.</td></tr>
+          <tr><td>Fixed aspect ratio</td><td>Stable composition with flexible size.</td><td>Still needs policy for extra space.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/game/camera_game.dart</span><span>Dart</span></div>
+        <pre><code>import 'dart:ui';
+
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+
+class CameraWorld extends World {}
+
+class CameraGame extends FlameGame&lt;CameraWorld&gt; {
+  CameraGame()
+      : super(
+          world: CameraWorld(),
+          camera: CameraComponent.withFixedResolution(
+            width: 800,
+            height: 450,
+          ),
+        );
+
+  late final RectangleComponent player;
+
+  @override
+  Future&lt;void&gt; onLoad() async {
+    await super.onLoad();
+    player = RectangleComponent(
+      position: Vector2.zero(),
+      size: Vector2.all(32),
+      anchor: Anchor.center,
+      paint: Paint()..color = const Color(0xffffb02e),
+    );
+    await world.add(player);
+
+    camera.follow(player);
+    await camera.viewport.add(
+      FpsTextComponent(position: Vector2(12, 12)),
+    );
+  }
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked example: why off-center follow feels better</h3>
+        <p>In a side-scroller, centering the player wastes half the view on the space behind them. Moving the viewfinder anchor toward the left exposes more upcoming hazards. Camera composition is gameplay information, not merely decoration.</p>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfall: confusing camera motion with world motion</h3>
+        <p>Moving every level object left to simulate travel complicates collisions and persistence. Usually the player and objects should retain meaningful world positions while the camera moves. Parallax layers may move at different apparent speeds, but they are a visual depth device rather than the authoritative level coordinate system.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>Which camera child controls zoom and observed position?</li>
+          <li>Where should a score label live if it must not scroll?</li>
+          <li>What does fixed resolution sacrifice for predictability?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div><p>The viewfinder controls observation and zoom. A static score can live under the viewport or in a Flutter overlay. Fixed resolution may leave unused screen space or bars on mismatched aspect ratios.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: camera test room</h3>
+        <p>Create a world larger than the viewport with visible grid markers. Follow the player, constrain the view to level bounds, add a static FPS/score HUD, and test two aspect ratios. Add a two-layer parallax backdrop and explain which elements live in world space.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li>The world is model space; the camera is a view.</li>
+          <li>Viewport and viewfinder solve different problems.</li>
+          <li>Resolution policy is a game-design decision that must be tested early.</li>
+        </ul>
+      </div>
+
+      <div class="note">
+        <h3>Official reference</h3>
+        <p>See Flame's <a href="https://docs.flame-engine.org/latest/flame/camera.html" target="_blank" rel="noreferrer">camera and world guide</a> for viewport types, follow behavior, bounds, and visibility helpers.</p>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#c08">&larr; C08 Movement and time</a>
+        <a href="#c10">C10 Hitboxes and collisions &rarr;</a>
+      </nav>
+    </section>
+    <section class="chapter" id="c10">
+      <header class="chapter-head" data-chapter="10">
+        <div class="eyebrow">C10 &middot; Block 2 &middot; Game mechanics</div>
+        <h2>Hitboxes and collisions</h2>
+        <p class="lead">Teach the game to notice contact precisely, then make the gameplay response an explicit decision.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Separate a component's visible artwork from its collision shape.</li>
+          <li>Enable Flame's collision system and react to collision start, continuation, and end.</li>
+          <li>Choose sensible <code>CollisionType</code> values and recognize when Forge2D is the better tool.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: detection asks; game logic answers</h3>
+        <p>A hitbox is an invisible geometric component attached to a game object. Flame's collision detector answers questions such as “are these shapes overlapping?” It does <em>not</em> push objects apart, calculate bounce, or decide that a coin should increase the score. Those are gameplay responses that belong to your code.</p>
+      </div>
+
+      <div class="diagram" role="img" aria-label="Collision processing pipeline">visible sprite
+     |
+     +-- child hitbox (circle / rectangle / convex polygon)
+                         |
+HasCollisionDetection --+-- broad and narrow overlap checks
+                         |
+                 CollisionCallbacks
+                         |
+          collect / damage / bounce / ignore</div>
+
+      <table>
+        <thead>
+          <tr><th>Collision type</th><th>Compared with</th><th>Typical use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>active</code></td><td>Active and passive hitboxes</td><td>Player or another object that must initiate checks.</td></tr>
+          <tr><td><code>passive</code></td><td>Active hitboxes only</td><td>Coins, walls, and many enemies that do not need to collide with one another.</td></tr>
+          <tr><td><code>inactive</code></td><td>Nothing</td><td>A temporarily disabled or distant object.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/game/collision_demo.dart</span><span>Dart</span></div>
+        <pre><code>import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+
+class CollisionDemo extends FlameGame with HasCollisionDetection {
+  @override
+  Future&lt;void&gt; onLoad() async {
+    await super.onLoad();
+    await addAll([
+      Player(position: Vector2(80, 120)),
+      Coin(position: Vector2(180, 120)),
+    ]);
+  }
+}
+
+class Player extends PositionComponent {
+  Player({required Vector2 position})
+      : super(position: position, size: Vector2.all(32));
+
+  @override
+  Future&lt;void&gt; onLoad() async {
+    await super.onLoad();
+    await add(
+      RectangleHitbox(collisionType: CollisionType.active),
+    );
+  }
+}
+
+class Coin extends PositionComponent with CollisionCallbacks {
+  Coin({required Vector2 position})
+      : super(position: position, size: Vector2.all(20));
+
+  @override
+  Future&lt;void&gt; onLoad() async {
+    await super.onLoad();
+    await add(
+      CircleHitbox(collisionType: CollisionType.passive),
+    );
+  }
+
+  @override
+  void onCollisionStart(
+    Set&lt;Vector2&gt; intersectionPoints,
+    PositionComponent other,
+  ) {
+    super.onCollisionStart(intersectionPoints, other);
+    if (other is Player) {
+      removeFromParent();
+    }
+  }
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked decision: built-in collisions or physics?</h3>
+        <p>A top-down coin pickup needs overlap detection only, so Flame hitboxes are ideal. A crate that must fall, rotate, stack, and transfer momentum needs a physics solver, so use Forge2D. Start with the smaller tool; collision detection is easier to tune and debug when realistic forces are not a requirement.</p>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfall: tunneling</h3>
+        <p>A very fast bullet may travel from one side of a thin wall to the other between two updates, so the shapes never overlap on a checked frame. Use a thicker hitbox, cap speed or time steps, ray-cast the travelled segment, or use Forge2D with a bullet body. Also enable <code>debugMode</code> while aligning hitboxes; artwork can hide a poor shape.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>Why is a hitbox usually simpler than the sprite silhouette?</li>
+          <li>Why should hundreds of coins normally be passive?</li>
+          <li>Which callback is appropriate for applying one hit of damage?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div>
+            <p>A simpler convex shape is cheaper, more stable, and easier for players to understand. Passive coins avoid unnecessary coin-versus-coin checks while still meeting an active player. Use <code>onCollisionStart</code> for one event at first contact; <code>onCollision</code> runs every colliding update and could apply damage many times.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: collectible field</h3>
+        <p>Create a visible player and five coins. Add correctly sized hitboxes, turn on debug mode, increment a score exactly once per coin, and remove each collected coin. Bonus: add an enemy whose contact starts a one-second invulnerability timer.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li>Hitboxes represent gameplay space; sprites represent appearance.</li>
+          <li><code>HasCollisionDetection</code> enables checks, while <code>CollisionCallbacks</code> receives results.</li>
+          <li>Collision callbacks report contact; your game owns the response.</li>
+        </ul>
+      </div>
+
+      <div class="note">
+        <h3>Official reference</h3>
+        <p>Review Flame's <a href="https://docs.flame-engine.org/latest/flame/collision_detection.html">collision detection documentation</a> for relative hitboxes, composite hitboxes, and callback details.</p>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#c09">&larr; C09 World, camera, and parallax</a>
+        <a href="#c11">C11 Gameplay states and architecture &rarr;</a>
+      </nav>
+    </section>
+
+    <section class="chapter" id="c11">
+      <header class="chapter-head" data-chapter="11">
+        <div class="eyebrow">C11 &middot; Block 2 &middot; Game mechanics</div>
+        <h2>Gameplay states and architecture</h2>
+        <p class="lead">Replace scattered booleans with named states, legal transitions, and one authoritative session model.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Distinguish app lifecycle, game phase, session data, and component-local state.</li>
+          <li>Model a round as a small finite state machine.</li>
+          <li>Keep rules, presentation, and infrastructure from becoming tightly coupled.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: one truth, several views</h3>
+        <p>The score shown by a HUD and the score used to unlock a level must come from the same session object. Components request changes through meaningful methods such as <code>collectCoin()</code> or <code>damagePlayer()</code>; they should not independently edit a text widget, save file, and music player. The game coordinates the rule, while renderers and overlays observe the result.</p>
+      </div>
+
+      <div class="diagram" role="img" aria-label="Game architecture dependency flow">Input + collisions
+        |
+        v
+Game commands -----> Session model -----> HUD / overlays
+        |                  |
+        v                  v
+component changes     persistence snapshot
+
+Dependencies point inward toward rules and data.</div>
+
+      <table>
+        <thead>
+          <tr><th>Current phase</th><th>Allowed next phases</th><th>Typical trigger</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>ready</td><td>playing</td><td>Countdown or Start button completes.</td></tr>
+          <tr><td>playing</td><td>paused, won, gameOver</td><td>User pauses, goal is reached, or health reaches zero.</td></tr>
+          <tr><td>paused</td><td>playing</td><td>User resumes.</td></tr>
+          <tr><td>won / gameOver</td><td>ready</td><td>Restart or next-level setup.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/game/adventure_game.dart</span><span>Dart</span></div>
+        <pre><code>import 'package:flame/game.dart';
+
+enum GamePhase { ready, playing, paused, won, gameOver }
+
+class GameSession {
+  int score = 0;
+  int health = 3;
+
+  void reset() {
+    score = 0;
+    health = 3;
+  }
+}
+
+class AdventureGame extends FlameGame {
+  final session = GameSession();
+  GamePhase phase = GamePhase.ready;
+
+  void startRound() {
+    if (phase != GamePhase.ready) return;
+    phase = GamePhase.playing;
+  }
+
+  void collectCoin() {
+    if (phase != GamePhase.playing) return;
+    session.score += 10;
+    if (session.score &gt;= 100) phase = GamePhase.won;
+  }
+
+  void damagePlayer() {
+    if (phase != GamePhase.playing) return;
+    session.health -= 1;
+    if (session.health &lt;= 0) phase = GamePhase.gameOver;
+  }
+
+  void pauseRound() {
+    if (phase != GamePhase.playing) return;
+    phase = GamePhase.paused;
+    pauseEngine();
+  }
+
+  void resumeRound() {
+    if (phase != GamePhase.paused) return;
+    phase = GamePhase.playing;
+    resumeEngine();
+  }
+
+  void prepareRestart() {
+    session.reset();
+    phase = GamePhase.ready;
+  }
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked example: what owns health?</h3>
+        <div class="two-col">
+          <div class="mini-card">
+            <h4>Rule layer</h4>
+            <p>Clamps health, applies invulnerability, decides game over, and emits a state change.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Presentation layer</h4>
+            <p>Animates hearts, flashes the screen, and opens a game-over overlay. It does not decide the rule.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfall: boolean soup</h3>
+        <p><code>isPaused</code>, <code>isDead</code>, <code>isWinning</code>, and <code>isStarting</code> can accidentally all become true. A phase enum makes impossible combinations unrepresentable. Also remember that <code>pauseEngine()</code> stops game updates; the resume action must come from Flutter UI, an external lifecycle callback, or another mechanism that still runs while paused.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>Why should a HUD not be the authoritative owner of score?</li>
+          <li>What benefit does a transition table provide?</li>
+          <li>Is an enemy's “stunned” state necessarily the same as the game's “paused” phase?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div>
+            <p>UI can be rebuilt or replaced, so durable game data belongs in a model. A transition table exposes legal and missing paths before code becomes tangled. “Stunned” is local to one enemy; “paused” is a session-wide phase. They operate at different levels and should be modelled separately.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: design a complete round</h3>
+        <p>Draw a transition table for <code>ready</code>, <code>playing</code>, <code>paused</code>, <code>won</code>, and <code>gameOver</code>. Implement command methods that reject illegal transitions. Then write three small tests: pausing from ready fails, health reaching zero ends play, and restart resets session data.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li>Use named phases for mutually exclusive global states.</li>
+          <li>Keep one authoritative session model and expose intention-revealing commands.</li>
+          <li>Separate rules from visual feedback and external services.</li>
+        </ul>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#c10">&larr; C10 Hitboxes and collisions</a>
+        <a href="#c12">C12 Effects, particles, and game feel &rarr;</a>
+      </nav>
+    </section>
+
+    <section class="chapter" id="c12">
+      <header class="chapter-head" data-chapter="12">
+        <div class="eyebrow">C12 &middot; Block 2 &middot; Game mechanics</div>
+        <h2>Effects, particles, and game feel</h2>
+        <p class="lead">Communicate impact and reward without allowing decoration to control the rules.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Animate component properties with effects and effect controllers.</li>
+          <li>Compose short-lived particles into a reusable burst.</li>
+          <li>Apply game-feel feedback with restraint and preserve gameplay clarity.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: event, signal, confirmation</h3>
+        <p>The rule happens first: an attack connects or a coin is collected. Feedback then confirms that event through several channels—motion, color, particles, sound, and perhaps a tiny camera shake. An Effect is a component that changes a target property over time. A Particle is lightweight, temporary rendering. Neither should be the source of truth for damage or score.</p>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>Tool</th><th>Good use</th><th>Important control</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>MoveEffect</code>, <code>ScaleEffect</code>, <code>OpacityEffect</code></td><td>Tween a component property.</td><td><code>EffectController</code> duration, curve, delay, repeat, and reverse.</td></tr>
+          <tr><td><code>SequenceEffect</code></td><td>Run effects one after another.</td><td>Keep sequences short and readable.</td></tr>
+          <tr><td><code>ParticleSystemComponent</code></td><td>Render sparks, dust, smoke, or confetti.</td><td>Particle count and lifespan.</td></tr>
+          <tr><td>Camera shake / hit stop</td><td>Emphasize rare, strong impacts.</td><td>Amplitude and duration; accessibility settings.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/game/feedback.dart</span><span>Dart</span></div>
+        <pre><code>import 'dart:math';
+import 'dart:ui';
+
+import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
+import 'package:flame/particles.dart';
+import 'package:flutter/animation.dart';
+
+void playCollectFeedback(
+  PositionComponent target,
+  Component effectLayer,
+) {
+  target.add(
+    ScaleEffect.by(
+      Vector2.all(1.25),
+      EffectController(
+        duration: 0.08,
+        reverseDuration: 0.12,
+        curve: Curves.easeOut,
+      ),
+    ),
+  );
+
+  final random = Random();
+  effectLayer.add(
+    ParticleSystemComponent(
+      position: target.position.clone(),
+      particle: Particle.generate(
+        count: 14,
+        lifespan: 0.45,
+        generator: (_) {
+          final angle = random.nextDouble() * pi * 2;
+          final speed = 70 + random.nextDouble() * 90;
+          return AcceleratedParticle(
+            speed: Vector2(cos(angle), sin(angle)) * speed,
+            acceleration: Vector2(0, 180),
+            child: CircleParticle(
+              radius: 2.5,
+              paint: Paint()..color = const Color(0xffffd166),
+            ),
+          );
+        },
+      ),
+    ),
+  );
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked feedback stack: collecting a rare gem</h3>
+        <div class="diagram">0 ms     rule adds score and removes gem collision
+0-80 ms  player scales up; bright particles spread
+40 ms    short sound begins
+80-200   scale returns; particles fall and fade
+200 ms   HUD score settles on its new value</div>
+        <p>The layers overlap slightly, but they all describe the same event. A common gem might use only sound and four particles; the rare gem earns the richer treatment.</p>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfall: feedback inflation</h3>
+        <p>If every event shakes the camera, flashes the screen, and spawns fifty particles, nothing feels important and readability collapses. Set a visual budget. Pool or limit frequently created objects, prefer short lifespans, and offer reduced-motion and volume controls.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>What determines the progress of an effect?</li>
+          <li>Why should damage be applied before a hit animation completes?</li>
+          <li>Which two particle settings most directly affect particle workload?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div>
+            <p>The effect controller supplies progress over time. Rules should not depend on decorative animation timing because feedback can be skipped, slowed, or disabled. Particle count and lifespan strongly affect how many particles coexist; rendering complexity matters too.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: three levels of impact</h3>
+        <p>Create feedback presets for a normal coin, a rare gem, and defeating a boss. Use only scale and particles first. Compare them side by side, reduce anything that obscures the player, and add a “reduced effects” setting that lowers particle counts.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li>Effects animate existing properties; particles are disposable visuals.</li>
+          <li>Feedback confirms rules—it does not own them.</li>
+          <li>Contrast, timing, and restraint create stronger game feel than raw quantity.</li>
+        </ul>
+      </div>
+
+      <div class="note">
+        <h3>Official references</h3>
+        <p>Continue with Flame's guides to <a href="https://docs.flame-engine.org/latest/flame/effects/effects.html">effects</a> and <a href="https://docs.flame-engine.org/latest/flame/rendering/particles.html">particles</a>.</p>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#c11">&larr; C11 Gameplay states and architecture</a>
+        <a href="#c13">C13 HUD, overlays, menus, navigation &rarr;</a>
+      </nav>
+    </section>
+
+    <section class="block-divider" id="block-3">
+      <div class="block-number">Block 3</div>
+      <h2>Complete game</h2>
+      <p>Connect the playfield to menus, sound, authored levels, enemies, optional physics, and durable progression. The goal is no longer a mechanic in isolation—it is a coherent player journey.</p>
+    </section>
+
+    <section class="chapter" id="c13">
+      <header class="chapter-head" data-chapter="13">
+        <div class="eyebrow">C13 &middot; Block 3 &middot; Complete game</div>
+        <h2>HUD, overlays, menus, and navigation</h2>
+        <p class="lead">Place each interface element in the layer that matches its job, then make screen changes predictable.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Choose between world components, viewport HUD components, and Flutter overlays.</li>
+          <li>Register and toggle named overlays through <code>GameWidget</code>.</li>
+          <li>Use <code>RouterComponent</code> for stack-based Flame routes and worlds.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: three coordinate and UI layers</h3>
+        <p>World content moves under the camera. A Flame HUD attached to the camera viewport stays fixed in game coordinates. A Flutter overlay is a widget above the game canvas, ideal for responsive buttons, settings, forms, accessibility, and menus. <code>RouterComponent</code> solves a different problem: which Flame page or world is currently active.</p>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>Need</th><th>Best starting point</th><th>Why</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Nameplate that follows an enemy</td><td>World component</td><td>It should share the enemy's world transform.</td></tr>
+          <tr><td>Crosshair or game-styled score</td><td>Viewport HUD component</td><td>It remains fixed while staying inside Flame.</td></tr>
+          <tr><td>Pause menu or settings form</td><td>Flutter overlay</td><td>Widgets provide layout, focus, semantics, and controls.</td></tr>
+          <tr><td>Home, level select, gameplay worlds</td><td><code>RouterComponent</code></td><td>Named routes and a route stack express navigation.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/main.dart</span><span>Dart / Flutter</span></div>
+        <pre><code>import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
+
+import 'game/adventure_game.dart';
+
+final game = AdventureGame();
+
+void main() {
+  runApp(
+    MaterialApp(
+      home: GameWidget&lt;AdventureGame&gt;(
+        game: game,
+        overlayBuilderMap: {
+          'pause': (context, game) =&gt; PauseMenu(game: game),
+        },
+      ),
+    ),
+  );
+}
+
+class PauseMenu extends StatelessWidget {
+  const PauseMenu({required this.game, super.key});
+
+  final AdventureGame game;
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: Colors.black54,
+      child: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            game.overlays.remove('pause');
+            game.resumeRound();
+          },
+          child: const Text('Resume'),
+        ),
+      ),
+    );
+  }
+}
+
+// Called by a pause button or input callback while the game is running:
+void openPauseMenu(AdventureGame game) {
+  game.pauseRound();
+  game.overlays.add('pause');
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked navigation design</h3>
+        <div class="diagram">home (opaque Route)
+  |
+  +-- level-select (opaque Route)
+         |
+         +-- level-1 (WorldRoute, maintainState: false)
+                 |
+                 +-- pause (transparent OverlayRoute)
+
+pushNamed() adds a destination; pop() returns to the one below.</div>
+        <p>A <code>Route</code> builds Flame components, a <code>WorldRoute</code> swaps camera worlds, and an <code>OverlayRoute</code> places Flutter UI on the route stack. Use <code>maintainState: false</code> when a level should be rebuilt after it is left.</p>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfall: recreating the game in <code>build()</code></h3>
+        <p>Flutter may call <code>build()</code> many times. Constructing a fresh game there can reset the session, duplicate loading, and leak audio resources. Keep a stable game instance in state or use <code>GameWidget.controlled</code> deliberately. When Flutter also exports a class named <code>Route</code>, import Material with <code>hide Route</code> where necessary.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>Why should a pause menu usually be a Flutter overlay?</li>
+          <li>What is the difference between hiding an overlay and popping a Flame route?</li>
+          <li>What does an opaque route do to the route below it?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div>
+            <p>Flutter widgets provide robust layout, input, and accessibility for menus. Overlay methods toggle named widgets above the same game; router operations change the active stack of Flame destinations. An opaque route prevents the lower route from rendering or receiving pointer events.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: pause and settings flow</h3>
+        <p>Build a pause overlay with Resume, Restart, Settings, and Exit to Menu. Pause the engine before showing it, guarantee that only legal phase transitions occur, and test keyboard focus. Bonus: represent Settings as a transparent router route and explain whether it should maintain state.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li>Choose UI placement by coordinate system and interaction needs.</li>
+          <li>Overlays layer Flutter widgets over one game; the router manages destinations.</li>
+          <li>Keep the game instance stable across Flutter rebuilds.</li>
+        </ul>
+      </div>
+
+      <div class="note">
+        <h3>Official references</h3>
+        <p>See the official guides for <a href="https://docs.flame-engine.org/latest/flame/overlays.html">overlays</a> and <a href="https://docs.flame-engine.org/latest/flame/router.html">RouterComponent</a>.</p>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#c12">&larr; C12 Effects, particles, and game feel</a>
+        <a href="#c14">C14 Audio, music, and volume &rarr;</a>
+      </nav>
+    </section>
+
+    <section class="chapter" id="c14">
+      <header class="chapter-head" data-chapter="14">
+        <div class="eyebrow">C14 &middot; Block 3 &middot; Complete game</div>
+        <h2>Audio, music, and volume</h2>
+        <p class="lead">Treat audio as a managed service with preload, mixing, lifecycle, and player preferences.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Use <code>flame_audio</code> for sound effects, background music, and pooled rapid sounds.</li>
+          <li>Organize assets and apply separate music and SFX volume controls.</li>
+          <li>Initialize, pause, resume, and dispose audio resources responsibly.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: audio is a small mixer</h3>
+        <p>Sound effects communicate short events and may overlap. Music is long-running and responds to app lifecycle. UI sounds may need to continue while the engine is paused. Put these concerns behind an audio service so game components request <code>playJump()</code> instead of knowing asset paths and player instances.</p>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>API</th><th>Use it for</th><th>Note</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>FlameAudio.play()</code></td><td>Occasional short effects</td><td>Returns an audio player for additional control.</td></tr>
+          <tr><td><code>AudioPool</code></td><td>Rapid, repeated, overlapping effects</td><td>Preloads several reusable players for lower latency.</td></tr>
+          <tr><td><code>FlameAudio.bgm</code></td><td>Looping background music</td><td>Initialize it after Flutter bindings exist so it follows app lifecycle.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/services/game_audio.dart</span><span>Dart</span></div>
+        <pre><code>import 'package:flame_audio/flame_audio.dart';
+
+class GameAudio {
+  late final AudioPool _laserPool;
+
+  double musicVolume = 0.55;
+  double sfxVolume = 0.8;
+  bool muted = false;
+
+  Future&lt;void&gt; load() async {
+    FlameAudio.bgm.initialize();
+    await FlameAudio.audioCache.loadAll([
+      'music/level.ogg',
+      'sfx/laser.wav',
+    ]);
+    _laserPool = await FlameAudio.createPool(
+      'sfx/laser.wav',
+      minPlayers: 2,
+      maxPlayers: 6,
+    );
+  }
+
+  Future&lt;void&gt; startMusic() async {
+    if (muted) return;
+    await FlameAudio.bgm.play(
+      'music/level.ogg',
+      volume: musicVolume,
+    );
+  }
+
+  Future&lt;void&gt; playLaser() async {
+    if (muted) return;
+    await _laserPool.start(volume: sfxVolume);
+  }
+
+  Future&lt;void&gt; dispose() async {
+    await FlameAudio.bgm.stop();
+    FlameAudio.bgm.dispose();
+    await _laserPool.dispose();
+  }
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked mix: keep information audible</h3>
+        <p>Suppose a battle has music, footsteps, lasers, explosions, and a low-health alarm. Start music around 0.45–0.60, keep high-value warnings clear, vary repeated effect pitch or choose several samples, and cap simultaneous low-priority sounds. Test on phone speakers and headphones; a mix that works on studio speakers can lose important frequencies elsewhere.</p>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfalls: loading late and fighting autoplay</h3>
+        <p>Loading a sound for the first time at the exact moment it is needed can cause delay. Preload predictable assets and pool rapid effects. Browsers and mobile platforms may require a user gesture before audio starts, so begin music after Start is pressed. Never trigger sound from <code>render()</code> or every overlapping collision update.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>Why is an audio pool useful for a laser?</li>
+          <li>Why should music and SFX have separate volume settings?</li>
+          <li>Where is the default <code>FlameAudio</code> asset directory?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div>
+            <p>A pool reduces startup latency and allows the same short sound to overlap. Players may want informational effects audible while muting or lowering music. Paths passed to the global cache are relative to <code>assets/audio</code> by default.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: a controllable soundscape</h3>
+        <p>Add one looping music track, two normal effects, and one pooled rapid effect. Build overlay sliders for music and SFX plus a mute toggle. Confirm that backgrounding the app pauses BGM, resuming restores it appropriately, and all resources are disposed when the game ends.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li>Preload predictable sounds and pool effects that fire rapidly.</li>
+          <li>Keep music, SFX, and mute preferences independent.</li>
+          <li>Audio has lifecycle and cleanup responsibilities just like visual assets.</li>
+        </ul>
+      </div>
+
+      <div class="note">
+        <h3>Official reference</h3>
+        <p>Use the <a href="https://docs.flame-engine.org/latest/bridge_packages/flame_audio/audio.html">flame_audio guide</a> and its linked BGM and AudioPool pages for current setup details.</p>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#c13">&larr; C13 HUD, overlays, menus, navigation</a>
+        <a href="#c15">C15 Maps and levels with Tiled &rarr;</a>
+      </nav>
+    </section>
+
+    <section class="chapter" id="c15">
+      <header class="chapter-head" data-chapter="15">
+        <div class="eyebrow">C15 &middot; Block 3 &middot; Complete game</div>
+        <h2>Maps and levels with Tiled</h2>
+        <p class="lead">Move spatial authoring out of source code while keeping behavior explicit in Dart.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Author a TMX map and render it with <code>flame_tiled</code>.</li>
+          <li>Separate visual tile layers from semantic object layers.</li>
+          <li>Convert Tiled objects and custom properties into game components.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: the map is data, not the game</h3>
+        <p>Tiled describes where tiles and annotated objects live. Dart decides what “Enemy,” “Exit,” or “Damage = 5” means. Tile layers paint repeated scenery; object layers mark spawn points, collision rectangles, camera bounds, and triggers. This separation lets a level designer rearrange content without rewriting component construction.</p>
+      </div>
+
+      <div class="diagram" role="img" aria-label="Tiled map loading pipeline">assets/tiles/forest.tmx
+  +-- tile layer: ground ---------> rendered by TiledComponent
+  +-- tile layer: decoration -----> rendered by TiledComponent
+  +-- object layer: spawns -------+
+  +-- object layer: triggers -----+--> parsed by Dart --> Components
+  +-- custom properties ----------+</div>
+
+      <table>
+        <thead>
+          <tr><th>Tiled feature</th><th>Recommended job</th><th>Dart result</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Tile layer</td><td>Ground, walls, decoration</td><td>Rendered sprite batches.</td></tr>
+          <tr><td>Object layer</td><td>Spawns, zones, doors, paths</td><td>Components or configuration records.</td></tr>
+          <tr><td>Class and custom properties</td><td>Meaning and tuned values</td><td>A factory selects type and reads values.</td></tr>
+          <tr><td>Group layer</td><td>Organize related layers</td><td>A hierarchy that can be queried.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/game/forest_level.dart</span><span>Dart</span></div>
+        <pre><code>import 'package:flame/components.dart';
+import 'package:flame_tiled/flame_tiled.dart';
+
+class ForestLevel extends World {
+  late final TiledComponent map;
+
+  @override
+  Future&lt;void&gt; onLoad() async {
+    await super.onLoad();
+
+    map = await TiledComponent.load(
+      'levels/forest.tmx',
+      Vector2.all(32),
+    );
+    await add(map);
+
+    final spawns =
+        map.tileMap.getLayer&lt;ObjectGroup&gt;('spawns');
+    if (spawns == null) {
+      throw StateError('Missing Tiled object layer: spawns');
+    }
+
+    for (final object in spawns.objects) {
+      if (object.class_ == 'Enemy') {
+        await add(
+          Enemy(position: Vector2(object.x, object.y)),
+        );
+      }
+    }
+  }
+}
+
+class Enemy extends PositionComponent {
+  Enemy({required super.position});
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked asset layout</h3>
+        <pre class="diagram">assets/
+  images/
+    tilesets/forest.png
+  tiles/
+    levels/forest.tmx
+    tilesets/forest.tsx</pre>
+        <p>Declare all required files or their directories under Flutter's <code>assets</code> section. Keep TMX/TSX image references portable and relative. <code>TiledComponent.load()</code> uses <code>assets/tiles</code> as the conventional prefix, so the example loads <code>assets/tiles/levels/forest.tmx</code>.</p>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfall: invisible naming contracts</h3>
+        <p>A typo such as <code>spawn</code> versus <code>spawns</code> silently breaks level construction if null is ignored. Validate required layers and classes immediately and report the map name in errors. Also keep tile size consistent: the size passed to <code>TiledComponent.load()</code> is the rendered tile size, and object coordinates are pixel values from Tiled.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>Why should an enemy spawn usually be an object rather than a painted tile?</li>
+          <li>What does <code>getLayer&lt;ObjectGroup&gt;()</code> return when the name is absent?</li>
+          <li>Where does the conventional Tiled asset loader look?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div>
+            <p>An object expresses semantic position and properties without pretending the enemy is static scenery. <code>getLayer</code> returns null when no matching layer exists, so required layers should be validated. Flame's conventional map location is <code>assets/tiles</code>, with the filename passed relative to it.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: one authored level</h3>
+        <p>Create a small orthogonal map with ground, decoration, and hidden object layers named <code>spawns</code> and <code>triggers</code>. Parse one Player, three Enemy, and one Exit object. Add a numeric <code>damage</code> property to a hazard and validate all required data with useful errors.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li>Tiled authors spatial data; Dart supplies behavior.</li>
+          <li>Use object layers and classes for semantic content.</li>
+          <li>Validate the map-to-code contract as soon as a level loads.</li>
+        </ul>
+      </div>
+
+      <div class="note">
+        <h3>Official reference</h3>
+        <p>Consult the <a href="https://docs.flame-engine.org/latest/bridge_packages/flame_tiled/flame_tiled.html">flame_tiled guide</a> and its layer documentation for supported map types and properties.</p>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#c14">&larr; C14 Audio, music, and volume</a>
+        <a href="#c16">C16 Enemies, AI, and difficulty &rarr;</a>
+      </nav>
+    </section>
+
+    <section class="chapter" id="c16">
+      <header class="chapter-head" data-chapter="16">
+        <div class="eyebrow">C16 &middot; Block 3 &middot; Complete game</div>
+        <h2>Enemies, AI, and difficulty</h2>
+        <p class="lead">Build readable opponents from perception, decisions, actions, and carefully tuned transitions.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Implement a finite state machine for a small enemy.</li>
+          <li>Separate sensing, state transitions, and state actions.</li>
+          <li>Tune difficulty through data, telegraphs, and fairness rather than hidden advantages.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: sense, decide, act</h3>
+        <p>AI does not need to be mysterious. Each update, an enemy gathers a small observation, decides whether its current state should change, and performs the action for that state. A finite state machine works well when only one behavior—patrol, chase, attack, or stunned—should own movement at a time.</p>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>State</th><th>Enter when</th><th>Action</th><th>Exit when</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>patrol</td><td>Player is far away</td><td>Follow waypoints</td><td>Player enters detection radius</td></tr>
+          <tr><td>chase</td><td>Player detected</td><td>Move toward last known position</td><td>Attack range reached or player escapes</td></tr>
+          <tr><td>attack</td><td>Player close and cooldown ready</td><td>Telegraph, then strike</td><td>Player leaves range or attack completes</td></tr>
+          <tr><td>stunned</td><td>Strong hit lands</td><td>Stop and show feedback</td><td>Stun timer ends</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/game/enemy.dart</span><span>Dart</span></div>
+        <pre><code>import 'package:flame/components.dart';
+
+import 'adventure_game.dart';
+
+enum EnemyState { patrol, chase, attack, stunned }
+
+class Enemy extends PositionComponent
+    with HasGameReference&lt;AdventureGame&gt; {
+  Enemy({required super.position});
+
+  EnemyState state = EnemyState.patrol;
+  double speed = 90;
+  double attackCooldown = 0;
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    attackCooldown -= dt;
+    if (attackCooldown &lt; 0) attackCooldown = 0;
+
+    final offset = game.player.position - position;
+    final distance = offset.length;
+
+    // Use a larger exit radius to prevent rapid state flapping.
+    if (state == EnemyState.patrol &amp;&amp; distance &lt; 180) {
+      state = EnemyState.chase;
+    } else if (state == EnemyState.chase &amp;&amp; distance &gt; 230) {
+      state = EnemyState.patrol;
+    } else if (state == EnemyState.chase &amp;&amp; distance &lt; 42) {
+      state = EnemyState.attack;
+    } else if (state == EnemyState.attack &amp;&amp; distance &gt; 58) {
+      state = EnemyState.chase;
+    }
+
+    switch (state) {
+      case EnemyState.patrol:
+        patrol(dt);
+      case EnemyState.chase:
+        if (distance &gt; 0) {
+          position += offset.normalized() * speed * dt;
+        }
+      case EnemyState.attack:
+        if (attackCooldown == 0) {
+          game.tryEnemyAttack(this);
+          attackCooldown = 1.2;
+        }
+      case EnemyState.stunned:
+        break;
+    }
+  }
+
+  void patrol(double dt) {
+    // Follow the next authored waypoint.
+  }
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked difficulty tuning</h3>
+        <div class="three-col">
+          <div class="mini-card">
+            <h4>Easy</h4>
+            <p>Long telegraph, slower projectile, forgiving detection, one threat at a time.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Normal</h4>
+            <p>Moderate cooldowns and overlapping enemy roles with readable gaps.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Hard</h4>
+            <p>Shorter openings and smarter coordination—not invisible damage or ignored rules.</p>
+          </div>
+        </div>
+        <p>Keep these values in configuration records so difficulty changes data rather than duplicating AI code.</p>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfall: state flapping</h3>
+        <p>If chase starts below 180 pixels and stops above the same 180 pixels, tiny movement around the boundary can switch state every frame. Use hysteresis: enter at 180, exit at 230. State timers, explicit enter/exit methods, and a visible debug label make AI much easier to reason about.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>Why split perception, decision, and action?</li>
+          <li>What problem does hysteresis solve?</li>
+          <li>What makes a difficult attack feel fair?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div>
+            <p>Separation makes each part testable and prevents movement code from secretly changing state. Hysteresis stops noisy transitions near a threshold. A fair attack is consistent, telegraphed, avoidable with learned skill, and governed by the same visible rules each time.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: guard AI</h3>
+        <p>Implement patrol, chase, attack, and stunned states for a guard. Add enter and exit radii, an attack telegraph, cooldown, and on-screen debug state. Create two configuration presets and compare difficulty without adding new branches.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li>A small FSM makes mutually exclusive behavior explicit.</li>
+          <li>Transition thresholds, timers, and telegraphs shape fairness.</li>
+          <li>Difficulty is a data and encounter-design problem, not simply more health.</li>
+        </ul>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#c15">&larr; C15 Maps and levels with Tiled</a>
+        <a href="#c17">C17 Physics with Forge2D &rarr;</a>
+      </nav>
+    </section>
+
+    <section class="chapter" id="c17">
+      <header class="chapter-head" data-chapter="17">
+        <div class="eyebrow">C17 &middot; Block 3 &middot; Complete game</div>
+        <h2>Physics with Forge2D</h2>
+        <p class="lead">Use a solver when bodies, forces, fixtures, and joints are genuinely part of the design.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Create a <code>Forge2DGame</code> and add <code>BodyComponent</code> objects to its physics world.</li>
+          <li>Configure body type, fixtures, density, friction, and restitution.</li>
+          <li>Handle contact callbacks without mutating the physics world during a solver step.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: body + fixtures + solver</h3>
+        <p>A Body owns motion: position, velocity, rotation, and type. One or more Fixtures give that body shapes and material properties. The world advances them under gravity, forces, contacts, and joints. Flame renders and organizes the components around this solver. Think in physics-world units, then use camera zoom to make those units visible.</p>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>Body type</th><th>Moved by</th><th>Typical use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>static</code></td><td>Not moved by the solver</td><td>Ground, fixed walls.</td></tr>
+          <tr><td><code>dynamic</code></td><td>Forces, gravity, impulses, contacts</td><td>Ball, crate, ragdoll piece.</td></tr>
+          <tr><td><code>kinematic</code></td><td>Velocity set by code</td><td>Moving platform or mechanism.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/game/physics_demo.dart</span><span>Dart</span></div>
+        <pre><code>import 'package:flame/components.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
+
+class PhysicsDemo extends Forge2DGame {
+  PhysicsDemo()
+      : super(
+          gravity: Vector2(0, 10),
+          zoom: 20,
+        );
+
+  @override
+  Future&lt;void&gt; onLoad() async {
+    await super.onLoad();
+    await world.add(Ball(Vector2(0, -5)));
+  }
+}
+
+class Ball extends BodyComponent with ContactCallbacks {
+  Ball(this.spawnPosition);
+
+  final Vector2 spawnPosition;
+  bool touchedSomething = false;
+
+  @override
+  Body createBody() {
+    final shape = CircleShape()..radius = 0.5;
+    final fixture = FixtureDef(
+      shape,
+      density: 1,
+      friction: 0.3,
+      restitution: 0.7,
+    );
+    final definition = BodyDef(
+      type: BodyType.dynamic,
+      position: spawnPosition,
+      userData: this,
+    );
+
+    return world.createBody(definition)
+      ..createFixture(fixture);
+  }
+
+  @override
+  void beginContact(Object other, Contact contact) {
+    touchedSomething = true;
+    // Record the event here; process destructive changes later.
+  }
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked material comparison</h3>
+        <table>
+          <thead><tr><th>Fixture</th><th>Density</th><th>Friction</th><th>Restitution</th><th>Feels like</th></tr></thead>
+          <tbody>
+            <tr><td>Rubber ball</td><td>1.0</td><td>0.3</td><td>0.8</td><td>Light and bouncy</td></tr>
+            <tr><td>Wooden crate</td><td>2.0</td><td>0.7</td><td>0.1</td><td>Heavy, grips, barely bounces</td></tr>
+            <tr><td>Ice puck</td><td>1.0</td><td>0.02</td><td>0.2</td><td>Slides for a long time</td></tr>
+          </tbody>
+        </table>
+        <p>These values are starting points, not physical truth. Tune them in the real scene because shape, scale, gravity, damping, and neighboring materials interact.</p>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfalls: pixel thinking and callback mutation</h3>
+        <p>Forge2D has practical speed and scale limits, so do not model a 64-pixel sprite as a 64-unit body. Use a body around 1–3 world units and camera zoom. Bodies belong at the top level of <code>Forge2DGame.world</code>, not nested under other bodies. Finally, do not create or destroy physics entities inside contact callbacks; set a flag or queue a command for processing after the physics step.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>What is the difference between a Body and a Fixture?</li>
+          <li>Which property mostly controls bounce?</li>
+          <li>Why set <code>userData: this</code> for callback-enabled bodies?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div>
+            <p>The Body owns motion; Fixtures attach shapes and material/filter data. Restitution primarily controls bounce. Contact propagation needs callback-capable user data on the body or fixture, so assigning the component allows Forge2D to notify it about contacts.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: a tiny physics playground</h3>
+        <p>Create static floor and walls plus dynamic rubber balls and wooden crates. Compare materials, add one kinematic platform, and display debug bodies. Bonus: connect two bodies with a distance or revolute joint and document why physics improves this design over simple overlap checks.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li>Use Forge2D for interacting forces, rotation, stacking, and joints—not every collision.</li>
+          <li>Body motion and fixture material/shape are separate concerns.</li>
+          <li>Respect world scale and defer destructive contact responses.</li>
+        </ul>
+      </div>
+
+      <div class="note">
+        <h3>Official reference</h3>
+        <p>Read Flame's <a href="https://docs.flame-engine.org/latest/bridge_packages/flame_forge2d/forge2d.html">Forge2D bridge guide</a> before adding contacts or joints to production code.</p>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#c16">&larr; C16 Enemies, AI, and difficulty</a>
+        <a href="#c18">C18 Persistence and progression &rarr;</a>
+      </nav>
+    </section>
+
+    <section class="chapter" id="c18">
+      <header class="chapter-head" data-chapter="18">
+        <div class="eyebrow">C18 &middot; Block 3 &middot; Complete game</div>
+        <h2>Persistence and progression</h2>
+        <p class="lead">Save a compact, versioned description of player progress—not a frozen component tree.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul>
+          <li>Choose storage appropriate to settings, progress, and larger structured data.</li>
+          <li>Hide persistence behind a repository and load before constructing dependent gameplay.</li>
+          <li>Version, validate, migrate, and test save data.</li>
+        </ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: snapshot meaning, rebuild objects</h3>
+        <p>Save durable meaning: unlocked level 4, high score 12,600, music volume 0.5. Do not serialize live Flame components, timers, image handles, or parent references. On load, validate a small data snapshot and use it to construct a fresh world. Persistence is an infrastructure detail behind an interface, not something every coin and enemy should call directly.</p>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>Storage</th><th>Good fit</th><th>Do not use it for</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>shared_preferences</code></td><td>Small settings and simple progress</td><td>Large datasets, critical transactions, or secrets.</td></tr>
+          <tr><td>JSON file</td><td>A moderate versioned save snapshot</td><td>Complex queries or concurrent updates.</td></tr>
+          <tr><td>SQLite</td><td>Large structured data and queries</td><td>A handful of volume toggles.</td></tr>
+          <tr><td>Secure storage</td><td>Tokens or sensitive credentials</td><td>Ordinary high scores and graphics settings.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/services/save_repository.dart</span><span>Dart</span></div>
+        <pre><code>import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
+class PlayerSave {
+  const PlayerSave({
+    this.version = 1,
+    this.unlockedLevel = 1,
+    this.highScore = 0,
+    this.musicEnabled = true,
+  });
+
+  final int version;
+  final int unlockedLevel;
+  final int highScore;
+  final bool musicEnabled;
+
+  Map&lt;String, Object&gt; toJson() =&gt; {
+        'version': version,
+        'unlockedLevel': unlockedLevel,
+        'highScore': highScore,
+        'musicEnabled': musicEnabled,
+      };
+
+  factory PlayerSave.fromJson(Map&lt;String, dynamic&gt; json) {
+    return PlayerSave(
+      version: json['version'] is int ? json['version'] as int : 1,
+      unlockedLevel: json['unlockedLevel'] is int
+          ? json['unlockedLevel'] as int
+          : 1,
+      highScore:
+          json['highScore'] is int ? json['highScore'] as int : 0,
+      musicEnabled: json['musicEnabled'] is bool
+          ? json['musicEnabled'] as bool
+          : true,
+    );
+  }
+}
+
+class SaveRepository {
+  SaveRepository({SharedPreferencesAsync? preferences})
+      : _preferences = preferences ?? SharedPreferencesAsync();
+
+  static const _key = 'player_save_v1';
+  final SharedPreferencesAsync _preferences;
+
+  Future&lt;PlayerSave&gt; load() async {
+    final raw = await _preferences.getString(_key);
+    if (raw == null) return const PlayerSave();
+
+    try {
+      final decoded = jsonDecode(raw);
+      if (decoded is! Map&lt;String, dynamic&gt;) {
+        return const PlayerSave();
+      }
+      return PlayerSave.fromJson(decoded);
+    } on FormatException {
+      return const PlayerSave();
+    }
+  }
+
+  Future&lt;void&gt; save(PlayerSave value) {
+    return _preferences.setString(
+      _key,
+      jsonEncode(value.toJson()),
+    );
+  }
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Worked save lifecycle</h3>
+        <div class="diagram">app starts
+   |
+   v
+load + validate + migrate
+   |
+   v
+construct session and level select
+   |
+   +-- settings change ----> debounce save
+   +-- level completed ----> save checkpoint
+   +-- app backgrounds ----> best-effort save
+
+The next launch always has safe defaults if data is absent or invalid.</div>
+        <p>Save at meaningful boundaries. A high score or unlocked level should be written when it changes; a slider may be debounced. Never rely only on app termination because the operating system may end a process without granting time for a final write.</p>
+      </div>
+
+      <div class="pitfall">
+        <h3>Common pitfalls: every-frame writes and unversioned data</h3>
+        <p>Disk-backed writes inside <code>update()</code> waste resources and can corrupt the player's experience when interrupted. Queue or debounce them. Treat loaded data as untrusted: fields may be missing, old, malformed, or outside legal ranges. <code>shared_preferences</code> supports primitive values and is not guaranteed durable enough for critical data; use a stronger store when the stakes require it.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol>
+          <li>Why save a level number instead of the current World component?</li>
+          <li>What is a schema version for?</li>
+          <li>Why use a repository rather than calling preferences from every component?</li>
+        </ol>
+        <details>
+          <summary>Answer and discussion</summary>
+          <div>
+            <p>A compact level identifier is stable and can reconstruct fresh objects, while a component contains runtime-only references. A schema version tells code how to interpret or migrate older layouts. A repository centralizes keys, defaults, validation, serialization, and tests while keeping game rules storage-agnostic.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <h3>Practice: versioned progression</h3>
+        <p>Persist music/SFX settings, high score, and unlocked level behind a repository. Test missing data, corrupt JSON, and valid data. Then design version 2 with a list of collected stars and write a migration plan from version 1 without deleting the player's progress.</p>
+      </div>
+
+      <div class="takeaways">
+        <h3>Takeaways</h3>
+        <ul>
+          <li>Persist compact domain data and reconstruct runtime components.</li>
+          <li>Validate, default, version, and migrate every save format.</li>
+          <li>Save at meaningful events through one testable repository.</li>
+        </ul>
+      </div>
+
+      <div class="note">
+        <h3>Official reference</h3>
+        <p>The current plugin recommends <code>SharedPreferencesAsync</code> or <code>SharedPreferencesWithCache</code> for new code. Review the <a href="https://pub.dev/packages/shared_preferences">shared_preferences package documentation</a> before choosing cache and platform options.</p>
+      </div>
+
+      <nav class="chapter-nav" aria-label="Chapter navigation">
+        <a href="#c17">&larr; C17 Physics with Forge2D</a>
+        <a href="#c19">C19 Advanced rendering &rarr;</a>
+      </nav>
+    </section>
+    <section class="block-divider" aria-labelledby="block-4-title">
+      <div class="block-number">Block 4 · Technical quality</div>
+      <h2 id="block-4-title">Make it trustworthy</h2>
+      <p>A game that works once on the developer's computer is a prototype. This block turns it into software you can inspect, test, measure, and comfortably play on more than one kind of device.</p>
+    </section>
+
+    <section class="chapter" id="c19">
+      <header class="chapter-head" data-chapter="C19">
+        <div class="eyebrow">Chapter C19 · Technical quality</div>
+        <h2>Advanced rendering</h2>
+        <p class="lead">Rendering is the art of deciding what to draw, in what coordinate space, in what order, and at what cost. The best effect is not the most complicated one; it is the one that communicates gameplay clearly inside the frame budget.</p>
+      </header>
+
+      <div class="objectives">
+        <h3>Learning objectives</h3>
+        <ul><li>Reason about local transforms, component priority, compositing, and camera output.</li><li>Choose between direct drawing, cached snapshots, decorators, and post-processing.</li><li>Build a custom visual component without allocating new paint objects every frame.</li></ul>
+      </div>
+
+      <div class="concept">
+        <h3>Mental model: a pipeline, not a pile of pictures</h3>
+        <p>Flame traverses the component tree, applies transforms, and renders siblings according to their <code>priority</code>. A component's <code>render</code> method normally draws in its own local coordinate system. The camera then presents a view of the world through its viewport. Effects that require the completed image—blur, color grading, bloom, distortion—belong later in the pipeline.</p>
+      </div>
+
+      <div class="diagram" role="img" aria-label="Rendering pipeline">UPDATE STATE
+    ↓
+TRAVERSE COMPONENT TREE → local transforms → sibling priority
+    ↓
+DRAW TO CANVAS → camera viewfinder → viewport
+    ↓
+OPTIONAL POST-PROCESS → COMPOSITE FLUTTER OVERLAYS → SCREEN</div>
+
+      <table>
+        <thead><tr><th>Technique</th><th>Good fit</th><th>Cost or constraint</th></tr></thead>
+        <tbody>
+          <tr><td>Custom <code>render</code></td><td>Shapes, gauges, debug graphics, procedural art</td><td>Runs every rendered frame; keep it small and allocation-light.</td></tr>
+          <tr><td><code>priority</code> and hierarchy</td><td>Stable draw order and inherited transforms</td><td>Priority only orders siblings; structure still matters.</td></tr>
+          <tr><td>Snapshot or pre-rendered layer</td><td>Detailed scenery that rarely changes</td><td>The cache consumes memory and must be refreshed after a visual change.</td></tr>
+          <tr><td>Decorator or post-process</td><td>Blur, tint, outline, grading, whole-scene effects</td><td>Off-screen rendering and GPU work can be expensive; profile it.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/game/components/pulse_ring.dart</span><span>Dart · custom rendering</span></div>
+        <pre><code>import 'dart:ui';
+import 'package:flame/components.dart';
+
+class PulseRing extends PositionComponent {
+  PulseRing({required super.position})
+      : super(size: Vector2.all(96), anchor: Anchor.center);
+
+  final Paint _fill = Paint()..color = const Color(0x3329D9FF);
+  final Paint _line = Paint()
+    ..color = const Color(0xFF8BE9FD)
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 3;
+
+  double phase = 0;
+
+  @override
+  void update(double dt) {
+    phase = (phase + dt) % 1;
+  }
+
+  @override
+  void render(Canvas canvas) {
+    final center = (size / 2).toOffset();
+    final radius = 24 + 18 * phase;
+    _line.color = const Color(0xFF8BE9FD).withValues(alpha: 1 - phase);
+    canvas.drawCircle(center, radius, _fill);
+    canvas.drawCircle(center, radius, _line);
+  }
+}</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Escalate effects deliberately</h3>
+        <p>Begin with a sprite tint, scale pulse, or simple shape. Cache an unchanged complex subtree only after measurement shows repeated drawing is expensive. Use <code>PostProcessComponent</code> for a local subtree or <code>CameraComponent.postProcess</code> for a whole camera. Flame also distinguishes parallel and sequential post-process groups; in a sequential chain, every stage consumes the previous stage's output.</p>
+        <p>Official references: <a href="https://docs.flame-engine.org/latest/flame/rendering/post_processing.html">Flame post-processing</a>, <a href="https://docs.flame-engine.org/latest/flame/rendering/layers.html">layers and snapshots</a>, and <a href="https://docs.flame-engine.org/latest/flame/components/components.html">component priority and render contexts</a>.</p>
+      </div>
+
+      <div class="pitfall">
+        <h3>Pitfall · Visual sophistication without visual meaning</h3>
+        <p>Full-screen blur, particles, and screen shake can obscure hazards and create motion discomfort. Add an effects-intensity option, keep critical silhouettes readable, and never use an effect merely because the engine supports it.</p>
+      </div>
+
+      <div class="checkpoint">
+        <h3>Checkpoint</h3>
+        <ol><li>Why does changing priority not move a component between coordinate spaces?</li><li>When is a snapshot a poor choice?</li><li>Where would you apply an effect that must color-grade the entire scene?</li></ol>
+      </div>
+      <details><summary>Open the discussion</summary><div><p>Priority controls ordering among siblings, while parentage controls inherited transforms and context. A snapshot is poor for content that changes every frame because it must be regenerated. Whole-scene grading belongs on the camera's post-process; a local effect belongs around the affected subtree.</p></div></details>
+
+      <div class="exercise">
+        <h3>Practice · Readable damage feedback</h3>
+        <p>Add a custom ring or flash to the player. Compare three versions: direct drawing, a sprite/effect, and a post-process concept sketch. Record which one communicates damage best, then verify that disabling it does not alter game state.</p>
+      </div>
+      <div class="takeaways"><h3>Takeaways</h3><ul><li>Tree structure establishes space; priority establishes sibling order.</li><li>Cache stable visuals and profile expensive compositing.</li><li>Effects serve feedback, clarity, and mood—not the other way around.</li></ul></div>
+      <nav class="chapter-nav" aria-label="Chapter navigation"><a href="#c18">← C18 · Persistence</a><a href="#c20">C20 · Testing →</a></nav>
+    </section>
+
+    <section class="chapter" id="c20">
+      <header class="chapter-head" data-chapter="C20">
+        <div class="eyebrow">Chapter C20 · Technical quality</div>
+        <h2>Automated testing</h2>
+        <p class="lead">A useful test is a small executable promise. It lets you rebalance, refactor, and fix bugs without replaying the entire game after every edit.</p>
+      </header>
+
+      <div class="objectives"><h3>Learning objectives</h3><ul><li>Separate deterministic rules from rendering and input.</li><li>Select unit, Flame/component, widget, golden, or integration tests by risk.</li><li>Write a lifecycle test with <code>flame_test</code> and run a focused test suite.</li></ul></div>
+
+      <div class="concept">
+        <h3>Mental model: confidence in layers</h3>
+        <p>Test the cheapest layer that can prove the behavior. Pure rules such as damage, scoring, cooldowns, and state transitions should usually be ordinary Dart classes. Component tests prove Flame lifecycle and interaction. Widget tests prove menus and overlays. A few integration tests prove the critical journey on a real target.</p>
+      </div>
+
+      <table>
+        <thead><tr><th>Test layer</th><th>Question it answers</th><th>Typical speed</th></tr></thead>
+        <tbody>
+          <tr><td>Unit</td><td>Does one rule produce the correct state?</td><td>Very fast</td></tr>
+          <tr><td>Flame/component</td><td>Does a component load, mount, update, or collide correctly?</td><td>Fast</td></tr>
+          <tr><td>Widget/golden</td><td>Does a Flutter overlay behave or render as intended?</td><td>Moderate; goldens need careful review</td></tr>
+          <tr><td>Integration</td><td>Can a player complete an important end-to-end journey?</td><td>Slowest, highest system confidence</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-cell">
+        <div class="code-title"><span>test/component_mount_test.dart</span><span>Dart · flame_test</span></div>
+        <pre><code>import 'package:flame/components.dart';
+import 'package:flame_test/flame_test.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+void main() {
+  testWithFlameGame(
+    'a newly added pickup becomes mounted',
+    (game) async {
+      final pickup = PositionComponent()..addToParent(game);
+
+      await game.ready();
+
+      expect(pickup.isMounted, isTrue);
+    },
+  );
+}</code></pre>
+      </div>
+      <div class="code-cell">
+        <div class="code-title"><span>Terminal</span><span>PowerShell</span></div>
+        <pre><code>flutter pub add --dev flame_test
+flutter test test/component_mount_test.dart
+flutter test --coverage</code></pre>
+      </div>
+
+      <div class="example">
+        <h3>Make time and randomness controllable</h3>
+        <p>If a rule depends on a random seed, wall clock, storage plugin, or network, inject that dependency. Then a test can use a fixed seed, explicit <code>dt</code>, in-memory repository, or fake clock. Determinism turns “it fails sometimes” into a reproducible input.</p>
+        <p>Official references: <a href="https://docs.flutter.dev/testing/overview">Flutter testing overview</a> and the <a href="https://pub.dev/documentation/flame_test/latest/flame_test/">flame_test API</a>.</p>
+      </div>
+
+      <div class="pitfall"><h3>Pitfall · Testing implementation trivia</h3><p>A test that asserts private call order or exact component-tree shape may break during a harmless refactor. Prefer outcomes: score changed once, cooldown prevented a second shot, player state became invulnerable, or the pause control remained reachable.</p></div>
+      <div class="checkpoint"><h3>Checkpoint</h3><ol><li>Why should damage calculation be separated from sprite rendering?</li><li>What does an integration test prove that a unit test cannot?</li><li>Why is an unseeded random test difficult to debug?</li></ol></div>
+      <details><summary>Open the discussion</summary><div><p>Separation makes the rule fast and deterministic to test. Integration tests prove that multiple real layers cooperate, but cost more to run and maintain. An unseeded failure cannot reliably recreate the same generated sequence; recording or fixing the seed makes it repeatable.</p></div></details>
+      <div class="exercise"><h3>Practice · Protect one mechanic</h3><p>Extract one rule—combo scoring, health clamping, or fire cooldown—into a pure class. Write tests for its normal case, boundary, and invalid input. Add one Flame lifecycle test and intentionally break the rule to confirm the suite catches it.</p></div>
+      <div class="takeaways"><h3>Takeaways</h3><ul><li>Use many cheap tests and a small number of valuable end-to-end tests.</li><li>Control time, randomness, and external services.</li><li>Test behavior contracts more than internal structure.</li></ul></div>
+      <nav class="chapter-nav" aria-label="Chapter navigation"><a href="#c19">← C19 · Rendering</a><a href="#c21">C21 · Performance →</a></nav>
+    </section>
+
+    <section class="chapter" id="c21">
+      <header class="chapter-head" data-chapter="C21">
+        <div class="eyebrow">Chapter C21 · Technical quality</div>
+        <h2>Debugging and performance</h2>
+        <p class="lead">Performance work is experimental science: reproduce, measure, isolate, change one thing, and measure again. “It feels faster” is a hypothesis, not evidence.</p>
+      </header>
+
+      <div class="objectives"><h3>Learning objectives</h3><ul><li>Distinguish correctness debugging from performance profiling.</li><li>Read frame, CPU, allocation, and component-count signals.</li><li>Profile in the correct build mode before optimizing.</li></ul></div>
+
+      <div class="concept"><h3>Mental model: every frame has a budget</h3><p>At 60 Hz, a new frame arrives roughly every 16.7 ms; at 120 Hz, roughly every 8.3 ms. Late UI/Dart work or expensive raster/GPU work can create visible jank. Debug mode adds checks and JIT behavior, so Flutter's official guidance is to measure performance in profile mode, preferably on a representative physical device.</p></div>
+
+      <div class="diagram" role="img" aria-label="Performance investigation loop">REPRODUCE A SPECIFIC SCENE
+        ↓
+RECORD PROFILE TRACE → identify UI / raster / memory / asset symptom
+        ↓
+FORM ONE HYPOTHESIS → make one change → record the same scene again
+        ↓
+KEEP THE CHANGE ONLY IF THE EVIDENCE IMPROVES</div>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/game/arena_game.dart</span><span>Dart · debug instrumentation</span></div>
+        <pre><code>import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flutter/foundation.dart';
+
+class ArenaGame extends FlameGame {
+  @override
+  bool get debugMode =&gt; kDebugMode;
+
+  @override
+  Future&lt;void&gt; onLoad() async {
+    await super.onLoad();
+    if (kDebugMode) {
+      camera.viewport.add(
+        FpsTextComponent(position: Vector2(8, 8)),
+      );
+    }
+  }
+}</code></pre>
+      </div>
+      <div class="code-cell"><div class="code-title"><span>Terminal</span><span>Profile mode</span></div><pre><code>flutter run --profile -d windows
+# Open DevTools from VS Code or the running Flutter session,
+# then record the exact gameplay sequence that stutters.</code></pre></div>
+
+      <table>
+        <thead><tr><th>Symptom</th><th>Inspect first</th><th>Candidate experiment</th></tr></thead>
+        <tbody>
+          <tr><td>Slow Dart/UI time</td><td>CPU profile, long updates, widget rebuilds</td><td>Move repeated work out of the loop; reduce broad queries.</td></tr>
+          <tr><td>Slow raster time</td><td>Clips, opacity, blur, shadows, off-screen layers</td><td>Disable one effect; simplify compositing.</td></tr>
+          <tr><td>Periodic hitch</td><td>Allocation and GC pattern, spawning, asset decode</td><td>Reuse objects where justified; preload assets; cap bursts.</td></tr>
+          <tr><td>Collision cost grows with population</td><td>Collider count and broad phase</td><td>Remove inactive hitboxes or evaluate spatial partitioning.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="example"><h3>Use the right instruments</h3><p>Flame's <code>debugMode</code> shows component bounds and positions. <code>FpsTextComponent</code> exposes game-loop FPS, while the Flame DevTools extension can inspect the component tree and step the game. Flutter DevTools separates UI and raster frame work and provides CPU and memory views. On web, use Chrome DevTools for web performance profiling.</p><p>Official references: <a href="https://docs.flame-engine.org/latest/flame/other/debug.html">Flame debug features</a> and <a href="https://docs.flutter.dev/tools/devtools/performance">Flutter DevTools Performance view</a>.</p></div>
+
+      <div class="pitfall"><h3>Pitfall · Optimizing debug-mode noise</h3><p>Debug performance is not representative of release behavior. Also avoid “optimizing” by pooling everything or replacing readable code before a trace identifies a material cost. Complexity has a maintenance price.</p></div>
+      <div class="checkpoint"><h3>Checkpoint</h3><ol><li>Why is profile mode preferred for timing work?</li><li>What is the first question when a frame's raster bar is slow?</li><li>Why should a benchmark scene be reproducible?</li></ol></div>
+      <details><summary>Open the discussion</summary><div><p>Profile mode behaves much closer to release while retaining tracing. Slow raster work points toward what the scene asks the graphics pipeline to composite—clips, layers, opacity, shadows, shaders—not automatically toward game-rule code. A stable scene makes before/after traces comparable.</p></div></details>
+      <div class="exercise"><h3>Practice · A measurable stress scene</h3><p>Create a debug-only scene that spawns 50, 100, then 200 enemies. Record frame timing and component counts in profile mode. Change exactly one suspected bottleneck, repeat the same sequence, and write a three-sentence conclusion supported by numbers.</p></div>
+      <div class="takeaways"><h3>Takeaways</h3><ul><li>Correctness tools explain what happened; profilers explain where time or memory went.</li><li>Measure realistic builds on realistic targets.</li><li>Optimize a reproduced bottleneck, then verify the result.</li></ul></div>
+      <nav class="chapter-nav" aria-label="Chapter navigation"><a href="#c20">← C20 · Testing</a><a href="#c22">C22 · Cross-platform quality →</a></nav>
+    </section>
+
+    <section class="chapter" id="c22">
+      <header class="chapter-head" data-chapter="C22">
+        <div class="eyebrow">Chapter C22 · Technical quality</div>
+        <h2>Cross-platform quality and access</h2>
+        <p class="lead">Cross-platform does not mean identical pixels. It means preserving the same game rules and intent while adapting layout, input, language, and access to the space and capabilities the player actually has.</p>
+      </header>
+
+      <div class="objectives"><h3>Learning objectives</h3><ul><li>Design around available space instead of device-name assumptions.</li><li>Offer equivalent touch, keyboard, mouse, and controller paths where appropriate.</li><li>Expose critical UI through semantics and prepare strings and layouts for localization.</li></ul></div>
+
+      <div class="concept"><h3>Mental model: invariant core, adaptive shell</h3><p>Keep simulation rules independent of screen size and input source. Translate physical input into semantic actions such as <em>move</em>, <em>confirm</em>, and <em>pause</em>. Let the camera/viewport adapt the world, and let Flutter overlays adapt menus, focus order, text, and controls. Use <code>LayoutBuilder</code> for local constraints or <code>MediaQuery.sizeOf</code> for the app window—not a guessed “phone versus tablet” category.</p></div>
+
+      <table>
+        <thead><tr><th>Dimension</th><th>Questions to test</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>Window and density</td><td>Small, wide, tall, resized, high-DPI?</td><td>No clipped HUD; world remains legible.</td></tr>
+          <tr><td>Input</td><td>Touch, keyboard, mouse, focus, controller?</td><td>Every essential action has a reachable path.</td></tr>
+          <tr><td>Accessibility</td><td>Labels, target sizes, contrast, reduced effects?</td><td>Guideline tests plus real assistive-technology checks.</td></tr>
+          <tr><td>Language</td><td>Long strings, plural rules, RTL, locale formats?</td><td>No concatenated sentences or broken layouts.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/ui/game_shell.dart</span><span>Dart · adaptive, semantic overlay</span></div>
+        <pre><code>LayoutBuilder(
+  builder: (context, constraints) {
+    final compact = constraints.maxWidth &lt; 700;
+
+    return Stack(
+      children: [
+        Positioned.fill(child: GameWidget(game: game)),
+        Positioned(
+          top: 12,
+          right: 12,
+          child: Semantics(
+            label: 'Pause game',
+            button: true,
+            child: IconButton(
+              tooltip: 'Pause',
+              iconSize: compact ? 32 : 28,
+              onPressed: game.pauseEngine,
+              icon: const Icon(Icons.pause),
+            ),
+          ),
+        ),
+      ],
+    );
+  },
+)</code></pre>
+      </div>
+
+      <div class="example"><h3>Flutter is your accessibility bridge</h3><p><code>GameWidget</code> is a normal Flutter widget and supports Flutter overlays. Standard Flutter controls bring useful focus and semantics behavior; custom-painted game interactions should not be assumed to communicate a meaningful role or label. Mirror essential status and actions with appropriately labeled widgets or explicit <code>Semantics</code>. Test large text, contrast, target size, keyboard-only play, and a real screen reader.</p><p>For localization, keep player-facing strings outside game logic and use Flutter's generated localization workflow with ARB resources. Leave room for translated text, avoid building sentences from fragments, and test right-to-left layout if it is supported.</p><p>Official references: <a href="https://docs.flame-engine.org/latest/flame/game_widget.html">Flame GameWidget</a>, <a href="https://docs.flutter.dev/ui/adaptive-responsive/general">adaptive layout</a>, <a href="https://docs.flutter.dev/ui/accessibility/accessibility-testing">accessibility testing</a>, and <a href="https://docs.flutter.dev/ui/internationalization">internationalization</a>.</p></div>
+
+      <div class="pitfall"><h3>Pitfall · One platform as the hidden specification</h3><p>A game tuned only with a mouse on a large monitor may technically launch on a phone yet remain unplayable. Include the smallest supported window, touch ergonomics, keyboard focus, safe areas, lifecycle interruption, and the weakest target in the acceptance criteria.</p></div>
+      <div class="checkpoint"><h3>Checkpoint</h3><ol><li>Why is window width more useful than a “tablet” check for layout?</li><li>What is a semantic action?</li><li>Why should translated sentences not be assembled from fragments?</li></ol></div>
+      <details><summary>Open the discussion</summary><div><p>Window constraints describe the actual space, including resizable and split-screen cases. A semantic action represents intent independently of hardware, so Space, a tap, or a controller button can all map to “confirm.” Fragment order and grammar vary by language; translators need the complete message and context.</p></div></details>
+      <div class="exercise"><h3>Practice · Access matrix</h3><p>Play one complete round at two window sizes using touch or simulated touch, then keyboard only. Add semantic labels to pause/restart, test the largest text scale, and create one deliberately long translated string. Record every blocked action and layout failure before fixing them.</p></div>
+      <div class="takeaways"><h3>Takeaways</h3><ul><li>Adapt to constraints and capabilities, not marketing categories.</li><li>Map many input sources to stable gameplay actions.</li><li>Accessibility and localization are architecture decisions, not release-week decoration.</li></ul></div>
+      <nav class="chapter-nav" aria-label="Chapter navigation"><a href="#c21">← C21 · Performance</a><a href="#c23">C23 · Pre-production →</a></nav>
+    </section>
+
+    <section class="block-divider" aria-labelledby="block-5-title">
+      <div class="block-number">Block 5 · Final project</div>
+      <h2 id="block-5-title">Finish something worth showing</h2>
+      <p>The final project is deliberately small. You will define its promise, prove it in a vertical slice, produce only the content that strengthens that promise, ship a tested build, and explain what you learned.</p>
+    </section>
+
+    <section class="chapter" id="c23">
+      <header class="chapter-head" data-chapter="C23">
+        <div class="eyebrow">Chapter C23 · Final project</div>
+        <h2>Design and pre-production</h2>
+        <p class="lead">Pre-production converts enthusiasm into a finishable promise. The goal is not a giant design document; it is a small set of decisions that prevent weeks of contradictory work.</p>
+      </header>
+
+      <div class="objectives"><h3>Learning objectives</h3><ul><li>Express a game as a player fantasy, core loop, and three design pillars.</li><li>Separate must-have scope from attractive extras.</li><li>Identify project risks and design the cheapest experiment for each.</li></ul></div>
+
+      <div class="concept"><h3>Mental model: promise, loop, constraints</h3><p>The <strong>promise</strong> is what the player should feel. The <strong>core loop</strong> is the repeated chain of decisions that creates that feeling. <strong>Constraints</strong>—time, skill, art, target, and content budget—shape the version you can actually finish. A feature belongs only when it reinforces a pillar and fits the budget.</p></div>
+
+      <div class="code-cell">
+        <div class="code-title"><span>docs/game_brief.yaml</span><span>YAML · one-page brief</span></div>
+        <pre><code>title: Orbit Courier
+player_fantasy: "Deliver fragile cargo through a dangerous tiny solar system."
+audience: "Players who enjoy readable five-minute score runs"
+core_loop:
+  - choose a route
+  - thrust and dodge
+  - deliver cargo
+  - upgrade one capability
+pillars:
+  - momentum_is_a_choice
+  - danger_is_always_readable
+  - failure_teaches_quickly
+must_have: [one_ship, three_hazards, one_upgrade_choice, local_high_score]
+not_now: [multiplayer, procedural_campaign, online_accounts]
+target: windows_and_web
+session_minutes: 5</code></pre>
+      </div>
+
+      <table>
+        <thead><tr><th>Risk</th><th>Uncertainty</th><th>Cheapest proof</th></tr></thead>
+        <tbody><tr><td>Control feel</td><td>Is momentum fun or frustrating?</td><td>Grey-box ship and one obstacle.</td></tr><tr><td>Technical</td><td>Can the target sustain the intended population?</td><td>Profiled stress scene.</td></tr><tr><td>Content</td><td>Can one person make enough readable art?</td><td>One representative finished asset set.</td></tr><tr><td>Schedule</td><td>Will the must-haves fit?</td><td>Estimate by playable milestones, then cut the largest unknown.</td></tr></tbody>
+      </table>
+
+      <div class="example"><h3>A useful scope sentence</h3><p>“One polished five-minute run with one character, one arena, three meaningful hazards, and one complete restart flow” is testable. “A space roguelike with lots of enemies and progression” is an aspiration. Give every must-have a visible completion condition.</p></div>
+      <div class="pitfall"><h3>Pitfall · Designing the sequel first</h3><p>Accounts, multiplayer, procedural campaigns, elaborate inventories, and multiple worlds multiply risk. Put good ideas in <em>not now</em>. Cutting scope protects the core; it does not betray it.</p></div>
+      <div class="checkpoint"><h3>Checkpoint</h3><ol><li>How does a pillar help reject a feature?</li><li>What is the difference between a core loop and a feature list?</li><li>Which risk should you prototype first?</li></ol></div>
+      <details><summary>Open the discussion</summary><div><p>A pillar provides a decision rule: a feature that reinforces none of the pillars is likely noise. A loop describes repeated player decisions and feedback; a feature list merely names systems. Prototype the uncertainty that could invalidate the project or force the largest redesign.</p></div></details>
+      <div class="exercise"><h3>Practice · Approve your own game</h3><p>Write a one-page brief like the example. Limit yourself to three pillars, five must-haves, and a five-to-ten-minute target session. Add three risks with experiments that each take no more than one study session.</p></div>
+      <div class="takeaways"><h3>Takeaways</h3><ul><li>A clear promise and loop guide thousands of small decisions.</li><li>“Not now” is a production tool.</li><li>Prototype uncertainty before producing volume.</li></ul></div>
+      <nav class="chapter-nav" aria-label="Chapter navigation"><a href="#c22">← C22 · Cross-platform quality</a><a href="#c24">C24 · Vertical slice →</a></nav>
+    </section>
+
+    <section class="chapter" id="c24">
+      <header class="chapter-head" data-chapter="C24">
+        <div class="eyebrow">Chapter C24 · Final project</div>
+        <h2>Prototype and vertical slice</h2>
+        <p class="lead">A prototype asks whether the idea can work. A vertical slice asks whether you can deliver the final-quality experience in miniature. Confusing the two produces beautiful experiments or enormous unfinished games.</p>
+      </header>
+
+      <div class="objectives"><h3>Learning objectives</h3><ul><li>Build throwaway prototypes around risky questions.</li><li>Define a thin end-to-end slice with production-quality standards.</li><li>Use exit criteria to decide when to continue, change direction, or stop.</li></ul></div>
+
+      <div class="concept"><h3>Mental model: horizontal breadth versus vertical depth</h3><p>A horizontal prototype touches many systems shallowly. A vertical slice follows one narrow player journey all the way down: input, rules, feedback, audio, UI, persistence, performance, and restart. The slice becomes the quality reference and reveals the real cost per unit of content.</p></div>
+
+      <div class="diagram" role="img" aria-label="Prototype and vertical slice comparison">PROTOTYPE:     controls ─ combat ─ upgrades ─ map ─ enemies   (broad, rough)
+
+VERTICAL SLICE: START
+                  ↓
+              PLAY ONE LOOP
+                  ↓
+          FEEDBACK + AUDIO + HUD
+                  ↓
+            RESULT → SAVE → RESTART                 (narrow, deep)</div>
+
+      <div class="code-cell">
+        <div class="code-title"><span>lib/game/build_scope.dart</span><span>Dart · explicit slice boundary</span></div>
+        <pre><code>enum BuildScope { prototype, verticalSlice, release }
+
+class GameConfig {
+  const GameConfig({required this.scope});
+  final BuildScope scope;
+
+  bool get enableMetaProgression =&gt; scope == BuildScope.release;
+  bool get useFinalFeedback =&gt; scope != BuildScope.prototype;
+}
+
+const config = GameConfig(scope: BuildScope.verticalSlice);</code></pre>
+      </div>
+
+      <table><thead><tr><th>Slice gate</th><th>Pass condition</th></tr></thead><tbody><tr><td>Playable loop</td><td>A new player can start, act, win or lose, and restart without developer help.</td></tr><tr><td>Representative quality</td><td>One environment and one interaction meet the intended art, sound, and feedback bar.</td></tr><tr><td>Technical health</td><td>No known save corruption or blocker; target scene meets its measured performance budget.</td></tr><tr><td>Learning</td><td>Playtest evidence answers the largest design risk.</td></tr></tbody></table>
+
+      <div class="example"><h3>Slice backlog</h3><p>Write work as observable outcomes: “Player can restart from the result screen with keyboard and touch” is better than “finish UI.” Mark everything outside the chosen journey as deferred, even if its code would be interesting.</p></div>
+      <div class="pitfall"><h3>Pitfall · Polishing before the loop survives</h3><p>Do not spend a day on particles while the core decision is still dull. Prototype with disposable assets. Raise the quality bar only after the risky interaction has earned another iteration.</p></div>
+      <div class="checkpoint"><h3>Checkpoint</h3><ol><li>What question does a prototype answer?</li><li>Why must a vertical slice include restart and failure?</li><li>When should prototype code be discarded?</li></ol></div>
+      <details><summary>Open the discussion</summary><div><p>A prototype answers a named uncertainty, not “is the whole game good?” Failure and restart complete the real player loop and expose navigation/state problems. Discard code when its shortcuts make the production architecture harder to trust; preserve the learning, not every line.</p></div></details>
+      <div class="exercise"><h3>Practice · One complete minute</h3><p>Define and build a 60–90 second journey from launch to restart. Write four pass conditions before coding. Play it three times with debug controls disabled, then cut anything that does not strengthen the central decision.</p></div>
+      <div class="takeaways"><h3>Takeaways</h3><ul><li>Prototype risks cheaply; slice one experience deeply.</li><li>Exit criteria prevent endless “almost ready.”</li><li>The slice estimates quality, architecture, and content cost together.</li></ul></div>
+      <nav class="chapter-nav" aria-label="Chapter navigation"><a href="#c23">← C23 · Pre-production</a><a href="#c25">C25 · Content and QA →</a></nav>
+    </section>
+
+    <section class="chapter" id="c25">
+      <header class="chapter-head" data-chapter="C25">
+        <div class="eyebrow">Chapter C25 · Final project</div>
+        <h2>Content, balance, polish, and QA</h2>
+        <p class="lead">Once the slice works, production becomes controlled variation: create content from proven patterns, tune with evidence, improve feedback, and systematically search for ways the build can fail.</p>
+      </header>
+
+      <div class="objectives"><h3>Learning objectives</h3><ul><li>Move tuning values out of scattered component code.</li><li>Balance with hypotheses, telemetry notes, and playtest observation.</li><li>Run a risk-based QA matrix and manage bugs by severity.</li></ul></div>
+
+      <div class="concept"><h3>Mental model: change one lever, observe one outcome</h3><p>Balance is not the pursuit of mathematically equal options. It is the shaping of interesting decisions for the intended audience. Establish a baseline, name the problem, change one lever, observe multiple players, and keep or revert. Polish improves how clearly the game communicates state; QA challenges the assumptions behind that state.</p></div>
+
+      <div class="code-cell">
+        <div class="code-title"><span>assets/config/balance.json</span><span>JSON · data-driven tuning</span></div>
+        <pre><code>{
+  "player": { "maxHealth": 5, "speed": 220.0, "invulnerabilitySeconds": 0.65 },
+  "enemy":  { "baseSpeed": 90.0, "spawnEverySeconds": 1.4 },
+  "score":  { "pickup": 100, "comboWindowSeconds": 2.0 }
+}</code></pre>
+      </div>
+
+      <table><thead><tr><th>QA axis</th><th>Representative cases</th></tr></thead><tbody><tr><td>State</td><td>First launch, continue, pause, resume, win, lose, restart, corrupted/missing save.</td></tr><tr><td>Timing</td><td>Rapid taps, simultaneous collisions, long idle, low/high frame rate, background/resume.</td></tr><tr><td>Display/input</td><td>Small and large window, resize, touch, keyboard, mouse, focus loss.</td></tr><tr><td>Content</td><td>Every enemy, level edge, upgrade combination, maximum values, empty values.</td></tr></tbody></table>
+
+      <div class="example"><h3>Write actionable bug reports</h3><p>Include build and platform, starting state, exact steps, expected result, actual result, reproduction rate, and evidence. Classify <strong>severity</strong> by player impact and <strong>priority</strong> by when the team should act. A rare save-destroying defect can be more severe than a frequent visual glitch.</p></div>
+      <div class="pitfall"><h3>Pitfall · Tuning from your own mastery</h3><p>You know every rule and have practiced the controls for hours. New players do not. Watch silently: where do they look, hesitate, misread, or quit? Do not teach around a problem that the game itself should explain.</p></div>
+      <div class="checkpoint"><h3>Checkpoint</h3><ol><li>Why change one balance lever at a time?</li><li>How is polish different from feature growth?</li><li>What is the difference between severity and priority?</li></ol></div>
+      <details><summary>Open the discussion</summary><div><p>One-variable experiments make cause and effect easier to infer. Polish clarifies and strengthens existing interactions; feature growth creates new systems and risk. Severity describes impact, while priority combines impact with schedule, reach, cost, and release needs.</p></div></details>
+      <div class="exercise"><h3>Practice · Three-player tuning pass</h3><p>Choose one measurable concern, such as “the first minute overwhelms beginners.” Record the current value, predicted outcome, and three observations. Change one value, repeat the same scenario, then write a decision. Finish with a ten-case regression checklist.</p></div>
+      <div class="takeaways"><h3>Takeaways</h3><ul><li>Centralized tuning data accelerates safe iteration.</li><li>Observation beats designer intuition alone.</li><li>QA is structured risk discovery plus disciplined regression.</li></ul></div>
+      <nav class="chapter-nav" aria-label="Chapter navigation"><a href="#c24">← C24 · Vertical slice</a><a href="#c26">C26 · Release →</a></nav>
+    </section>
+
+    <section class="chapter" id="c26">
+      <header class="chapter-head" data-chapter="C26">
+        <div class="eyebrow">Chapter C26 · Final project</div>
+        <h2>Building, signing, and publishing</h2>
+        <p class="lead">A release is a reproducible artifact plus the evidence, metadata, permissions, and ownership needed to put it safely in a player's hands.</p>
+      </header>
+
+      <div class="objectives"><h3>Learning objectives</h3><ul><li>Prepare versioned release builds for selected Flutter targets.</li><li>Keep signing credentials out of source control.</li><li>Run a release checklist covering behavior, legal assets, store material, and rollback.</li></ul></div>
+
+      <div class="concept"><h3>Mental model: source → signed artifact → channel → player</h3><p>A build compiles one reviewed source state into a platform artifact. Signing binds that artifact to a publisher identity where the platform requires it. A store or distribution channel adds review, metadata, policy, and staged delivery. Each released artifact must be traceable back to a version and commit.</p></div>
+
+      <div class="code-cell">
+        <div class="code-title"><span>pubspec.yaml + terminal</span><span>Release configuration</span></div>
+        <pre><code># pubspec.yaml
+version: 1.0.0+1
+
+# Validate before building
+dart format --output=none --set-exit-if-changed .
+flutter analyze
+flutter test
+
+# Build only the targets you actually support
+flutter build appbundle          # Android Play distribution
+flutter build web                # Static web output
+flutter build windows            # Windows release bundle
+flutter build ipa                # iOS archive; requires macOS/Xcode setup</code></pre>
+      </div>
+
+      <table><thead><tr><th>Release gate</th><th>Evidence</th></tr></thead><tbody><tr><td>Identity</td><td>Unique application ID, semantic version, increasing build number, matching release notes.</td></tr><tr><td>Quality</td><td>Clean analysis/tests, release-mode smoke test, supported-device matrix, no blocker defects.</td></tr><tr><td>Trust</td><td>Signing secrets protected, permissions justified, privacy disclosures accurate, licenses reviewed.</td></tr><tr><td>Presentation</td><td>Icon, screenshots, description, age/content rating, support and privacy links.</td></tr><tr><td>Operations</td><td>Artifact checksum/archive, staged rollout plan, crash feedback route, known rollback path.</td></tr></tbody></table>
+
+      <div class="example"><h3>Target-specific work remains</h3><p>Flutter supplies platform build commands, but stores have distinct certificates, signing files, packaging rules, screenshots, and review processes. Android commonly distributes an app bundle; iOS signing and App Store submission require Apple's toolchain; Windows and web have their own packaging and hosting choices. Follow the current guide for the chosen target immediately before release.</p><p>Official references: Flutter's <a href="https://docs.flutter.dev/deployment">deployment hub</a> and <a href="https://docs.flutter.dev/deployment/android">Android release guide</a>.</p></div>
+
+      <div class="pitfall"><h3>Pitfall · Treating secrets as project assets</h3><p>Never commit keystores, passwords, private keys, API secrets, or populated signing-property files. Ignore them, store them in a secret manager or protected local location, document how authorized maintainers obtain them, and keep a secure backup. Losing a signing identity can block future updates.</p></div>
+      <div class="checkpoint"><h3>Checkpoint</h3><ol><li>What do the two parts of <code>1.0.0+1</code> represent?</li><li>Why smoke-test the produced release artifact instead of only debug mode?</li><li>Why must every release map to a commit?</li></ol></div>
+      <details><summary>Open the discussion</summary><div><p>The first part is the user-facing semantic version; the suffix is the platform build number and should increase for submissions. Release builds can differ in compilation, assertions, assets, permissions, and signing. Commit traceability lets you reproduce, diagnose, patch, and audit exactly what shipped.</p></div></details>
+      <div class="exercise"><h3>Practice · Release candidate zero</h3><p>Choose one target. Create a release checklist, bump to <code>0.1.0+1</code>, run formatting/analyzer/tests, build the artifact, and launch that artifact outside the IDE. Archive the checklist and record its commit hash, size, platform, date, and three smoke-test results. Do not publish publicly yet.</p></div>
+      <div class="takeaways"><h3>Takeaways</h3><ul><li>Build, signing, and distribution are separate responsibilities.</li><li>Protect publisher credentials and make builds traceable.</li><li>The real release candidate is the artifact players receive.</li></ul></div>
+      <nav class="chapter-nav" aria-label="Chapter navigation"><a href="#c25">← C25 · Content and QA</a><a href="#c27">C27 · Portfolio →</a></nav>
+    </section>
+
+    <section class="chapter" id="c27">
+      <header class="chapter-head" data-chapter="C27">
+        <div class="eyebrow">Chapter C27 · Final project</div>
+        <h2>Portfolio and retrospective</h2>
+        <p class="lead">Shipping proves persistence. A strong case study proves judgment: what you tried, how the system works, which evidence changed your mind, and what you would do differently.</p>
+      </header>
+
+      <div class="objectives"><h3>Learning objectives</h3><ul><li>Present a playable project with a concise technical narrative.</li><li>Document architecture, constraints, testing, and measured decisions.</li><li>Run a blameless retrospective that produces concrete next actions.</li></ul></div>
+
+      <div class="concept"><h3>Mental model: claim, evidence, reflection</h3><p>“I built a game” is a claim. A playable link or artifact, focused video, source excerpt, test results, and performance capture are evidence. A retrospective explains your reasoning and growth. Together they reveal more than a long feature inventory.</p></div>
+
+      <div class="code-cell">
+        <div class="code-title"><span>README.md</span><span>Markdown · case-study skeleton</span></div>
+        <pre><code># Orbit Courier
+
+One sentence: player, goal, distinctive constraint.
+
+## Play
+- Release: &lt;link or artifact instructions&gt;
+- Controls: keyboard / touch / controller
+- Supported targets: Windows and web
+
+## What I owned
+- Game design, Dart architecture, Flame implementation, QA
+
+## Technical decisions
+- Why the World / camera / overlay boundary was chosen
+- How deterministic rules were tested
+- A measured performance problem and its before/after result
+
+## Run locally
+```text
+flutter pub get
+flutter run -d windows
+```
+
+## Lessons
+- One decision I would repeat
+- One decision I would change</code></pre>
+      </div>
+
+      <table><thead><tr><th>Portfolio evidence</th><th>What it demonstrates</th></tr></thead><tbody><tr><td>20–45 second gameplay clip</td><td>The loop, feedback, and finish quality without a long introduction.</td></tr><tr><td>Playable build and exact controls</td><td>Completion, usability, and respect for the reviewer's time.</td></tr><tr><td>Small architecture diagram</td><td>Boundaries among game rules, Flame components, services, and Flutter UI.</td></tr><tr><td>One test and one profile story</td><td>Engineering discipline and evidence-based decisions.</td></tr><tr><td>Honest retrospective</td><td>Self-awareness, prioritization, and ability to learn.</td></tr></tbody></table>
+
+      <div class="example"><h3>Retrospective prompts</h3><div class="two-col"><div class="mini-card"><h4>Look back</h4><p>What was the original promise? Which evidence shows it was or was not achieved? Where did time actually go?</p></div><div class="mini-card"><h4>Look forward</h4><p>What should be repeated, stopped, or changed? Which single skill would most improve the next project?</p></div></div><p>Write about decisions you personally made. Credit collaborators and asset creators precisely. Remove credentials, private analytics, and third-party assets you cannot redistribute before sharing a repository.</p></div>
+
+      <div class="pitfall"><h3>Pitfall · A portfolio that makes the reviewer investigate</h3><p>Do not hide the build below a wall of prose, require undocumented setup, or show ten minutes of menus before gameplay. Lead with the result, make controls obvious, state your contribution, and keep deep technical material available for readers who want it.</p></div>
+      <div class="checkpoint"><h3>Checkpoint</h3><ol><li>What evidence supports a performance claim?</li><li>Why state your personal contribution explicitly?</li><li>What makes a retrospective actionable?</li></ol></div>
+      <details><summary>Open the discussion</summary><div><p>A reproducible scenario, profile capture, numbers, and before/after comparison support a performance claim. Clear ownership prevents misleading credit and helps reviewers ask relevant questions. An actionable retrospective turns observations into specific experiments or habits with an owner and next opportunity.</p></div></details>
+      <div class="exercise"><h3>Practice · Publish the story</h3><p>Create the README, one architecture diagram, a short gameplay capture, and a release link or exact artifact instructions. Ask someone unfamiliar with the project to find the build and controls in under 30 seconds. Finish with three retrospective actions: repeat, stop, and try next.</p></div>
+      <div class="takeaways"><h3>Takeaways</h3><ul><li>Curate evidence around the experience and your decisions.</li><li>Make the project effortless to understand and try.</li><li>A finished game's lessons are raw material for the next finished game.</li></ul></div>
+      <nav class="chapter-nav" aria-label="Chapter navigation"><a href="#c26">← C26 · Release</a><a href="#appendix-command-reference">Appendices →</a></nav>
+    </section>
+  </main>
+
+  <section class="appendix" id="appendix-command-reference">
+    <div class="eyebrow">Appendix A</div>
+    <h2>Command reference</h2>
+    <table>
+      <thead><tr><th>Command</th><th>Purpose</th><th>When to use it</th></tr></thead>
+      <tbody>
+        <tr><td><code>flutter doctor -v</code></td><td>Diagnoses the toolchain.</td><td>Initial setup and platform problems.</td></tr>
+        <tr><td><code>flutter create .</code></td><td>Creates a Flutter project in the current folder.</td><td>Once, at project initialization.</td></tr>
+        <tr><td><code>flutter pub add flame</code></td><td>Adds Flame and resolves dependencies.</td><td>When turning a Flutter app into a Flame game.</td></tr>
+        <tr><td><code>dart format .</code></td><td>Formats Dart source files.</td><td>Before analysis or a commit.</td></tr>
+        <tr><td><code>flutter analyze</code></td><td>Performs static analysis.</td><td>Frequently; always before closing a chapter.</td></tr>
+        <tr><td><code>flutter test</code></td><td>Runs automated tests.</td><td>After behavior changes and before releases.</td></tr>
+        <tr><td><code>flutter run -d &lt;device&gt;</code></td><td>Runs on a selected target.</td><td>During development.</td></tr>
+        <tr><td><code>flutter build &lt;target&gt;</code></td><td>Produces a release artifact.</td><td>Release preparation.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="appendix" id="appendix-glossary">
+    <div class="eyebrow">Appendix B</div>
+    <h2>Compact glossary</h2>
+    <dl class="glossary">
+      <div><dt>Anchor</dt><dd>The point inside a component used as its positional reference.</dd></div>
+      <div><dt>Asset</dt><dd>A non-code resource such as an image, sound, font, or map.</dd></div>
+      <div><dt>Component</dt><dd>A unit in Flame's scene tree that owns behavior, state, or rendering.</dd></div>
+      <div><dt>Delta time (dt)</dt><dd>Seconds elapsed since the previous update.</dd></div>
+      <div><dt>Game loop</dt><dd>The repeating update-and-render cycle driving a real-time game.</dd></div>
+      <div><dt>Hitbox</dt><dd>A geometric region used to test collisions or precise pointer input.</dd></div>
+      <div><dt>HUD</dt><dd>Heads-up display: information fixed to the screen, such as health or score.</dd></div>
+      <div><dt>Sprite</dt><dd>An image or image region rendered as a game object.</dd></div>
+      <div><dt>Sprite sheet</dt><dd>One image containing multiple frames or sprites.</dd></div>
+      <div><dt>State machine</dt><dd>A model with explicit states and controlled transitions between them.</dd></div>
+      <div><dt>Viewport</dt><dd>The screen-space window through which the world is observed.</dd></div>
+      <div><dt>World</dt><dd>The Flame component containing objects that exist in game space.</dd></div>
+    </dl>
+  </section>
+
+  <section class="appendix sources" id="official-sources">
+    <div class="eyebrow">Appendix C</div>
+    <h2>Official sources and further study</h2>
+    <p>This coursebook explains the mental models and gives compact examples. The official documentation remains the authority for exact APIs and platform requirements.</p>
+    <ul>
+      <li><a href="https://dart.dev/language" target="_blank" rel="noreferrer">Dart language documentation</a></li>
+      <li><a href="https://docs.flutter.dev/" target="_blank" rel="noreferrer">Flutter documentation</a></li>
+      <li><a href="https://docs.flutter.dev/resources/games-toolkit" target="_blank" rel="noreferrer">Flutter Casual Games Toolkit</a></li>
+      <li><a href="https://docs.flame-engine.org/latest/" target="_blank" rel="noreferrer">Flame documentation</a></li>
+      <li><a href="https://pub.dev/packages/flame" target="_blank" rel="noreferrer">Flame package on pub.dev</a></li>
+      <li><a href="https://examples.flame-engine.org/" target="_blank" rel="noreferrer">Official Flame examples</a></li>
+      <li><a href="https://docs.flutter.dev/testing/overview" target="_blank" rel="noreferrer">Flutter testing overview</a></li>
+      <li><a href="https://docs.flutter.dev/perf" target="_blank" rel="noreferrer">Flutter performance documentation</a></li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Flutter + Flame Practical 2D Game Development Coursebook · Prepared 2026-07-16</p>
+    <p>Keep the source file, experiment in a separate Flutter project, and verify APIs against your pinned dependencies.</p>
+  </footer>
+</body>
+</html>
